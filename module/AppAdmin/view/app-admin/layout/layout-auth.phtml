@@ -1,0 +1,48 @@
+<?= $this->doctype() ?>
+<html lang="en">
+<head>
+    <?php $this->headMeta()
+        ->setCharset('utf-8')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+    ?>
+
+    <?php $this->seoData() ?>
+    <?= $this->headMeta() ?>
+    <?= $this->headTitle() ?>
+
+    <?= $this->headLink()
+        ->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath('skins/app-admin/favicon.ico')])
+        ->appendStylesheet($this->basePath('skins/app-admin/css/bootstrap.min.css'))
+        ->appendStylesheet($this->basePath('skins/app-admin/css/style.css'))
+        ->appendStylesheet($this->basePath('skins/app-admin/css/animate.css'))
+        ->appendStylesheet($this->basePath('skins/app-admin/font-awesome/css/font-awesome.css'))
+        ->appendStylesheet($this->basePath('skins/app-admin/css/plugins/switchery/switchery.css'))
+        ->appendStylesheet($this->basePath('skins/app-admin/css/plugins/ladda/ladda-themeless.min.css'))
+        ->appendStylesheet($this->basePath('skins/app-admin/custom/css/style.css'))
+    ?>
+
+    <?= $this->headScript()
+        ->prependFile($this->basePath('skins/app-admin/js/jquery-3.1.1.min.js'))
+        ->appendFile($this->basePath('skins/app-admin/js/bootstrap.min.js'))
+        ->appendFile($this->basePath('skins/app-admin/js/plugins/switchery/switchery.js'))
+        ->appendFile($this->basePath('skins/app-admin/js/plugins/ladda/spin.min.js'))
+        ->appendFile($this->basePath('skins/app-admin/js/plugins/ladda/ladda.min.js'))
+        ->appendFile($this->basePath('skins/app-admin/js/plugins/ladda/ladda.jquery.min.js'))
+    ?>
+</head>
+<body class="gray-bg">
+<div class="middle-box text-center loginscreen animated fadeInDown layoutauth">
+    <div class="place-middle">
+        <div class="ibox-content">
+            <?= $this->content ?>
+        </div>
+        <hr/>
+        <p class="m-t">
+            <?= $this->adminCopyright() ?>
+        </p>
+    </div>
+</div>
+<?= $this->inlineScript() ?>
+</body>
+</html>

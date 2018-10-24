@@ -1,0 +1,141 @@
+<?php
+/**
+ * @var $element \Zend\Form\Element
+ */
+
+$dataName = !empty($this->options['resource']) ? $this->options['resource'] : 'ingredients';
+$rowName = !empty($this->options['resource']) ? $this->translate('Ingredient') : $this->translate('Inventory');
+$buttonName = !empty($this->options['resource']) ? $this->translate('Add ingredient') : $this->translate('Add inventory');
+?>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-stripped text-center">
+        <thead>
+        <tr>
+            <th id="ingredients" class="text-center"><?= $rowName ?></th>
+            <th class="text-center"><?= $this->translate('Weight, kg') ?></th>
+            <th id="actions" class="text-center"><?= $this->translate('Actions') ?></th>
+        </tr>
+        </thead>
+        <tbody data-name="ingredients-container" data-count="<?= $this->fieldSet->count() ?>">
+        <?= $this->formCollection()->setFieldsetHelper($this->adminRenderTableIngredientFieldset())->setShouldWrap(false)->render($this->fieldSet) ?>
+        <?php if (!$this->fieldSet->count()) { ?>
+            <tr id="no-ingredients">
+                <td colspan="3">
+                    <?= $this->translate('No records found') ?>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm-12">
+        <button data-name="addIngredient" class="btn btn-primary btn-sm" onclick="return addIngredient();">
+            <?= $buttonName ?>
+        </button>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var ingredientSelects = $('select[name*="ingredients"]');
+        $(document).on('click', ingredientSelects, updateSelects);
+    });
+
+    /**
+     * Добавляет новый ингредиент
+     *
+     * @returns {boolean}
+     */
+    function addIngredient() {
+        var $ingredientContainer = $('tbody[data-name="ingredients-container"]'),
+            ingredientCount = $ingredientContainer.data('count') + 1,
+            $selectedOptions = $ingredientContainer.find('option:selected'),
+            template = $('span[data-template]').data('template');
+
+        $selectedOptions.each(function () {
+            var val = $(this).val(),
+                regexp = new RegExp('<option value="' + val + '">', 'g'),
+                replacement = '<option value="' + val + '" disabled>';
+
+
+            template = template.replace(regexp, replacement);
+        });
+        template = template.replace(/__index__/g, ingredientCount);
+        $ingredientContainer.data('count', ingredientCount);
+        $ingredientContainer.children(':last').after(template);
+        $('#no-ingredients').remove();
+        $('.chosen-select').chosen({width: "100%"});
+
+        return false;
+    }
+
+    /**
+     *Удаляет выбранный ингредиент
+     *
+     * @param element
+     * @returns {boolean}
+     */
+    function removeIngredient(element) {
+        var ingredientRowName = $(element).data('row-name'),
+            $ingredientContainer = $('tbody[data-name="ingredients-container"]'),
+            ingredientCount = $ingredientContainer.data('count') - 1,
+            emptyRowTmpl = '<tr id="no-ingredients"><td colspan="3"><?= $this->translate('No records found') ?></td></tr>',
+            $ingredientRow = $('tr[data-name="' + ingredientRowName + '"]'),
+            $disabledOptions = $ingredientContainer.find('option:disabled');
+
+        $ingredientRow.find('option:selected').each(function () {
+            var val = $(this).val();
+
+            $disabledOptions.each(function () {
+                var $this = $(this);
+
+                if ($this.val() === val) {
+                    $this.prop('disabled', false);
+                    $this.trigger("chosen:updated");
+                }
+            });
+        });
+        $ingredientRow.remove();
+        $ingredientContainer.data('count', ingredientCount);
+
+        if (!$('tr[data-name*="<?= $dataName ?>"]').length) {
+            $ingredientContainer.append(emptyRowTmpl);
+        }
+
+        return false;
+    }
+
+    function updateSelects() {
+        var $ingredientContainer = $('tbody[data-name="ingredients-container"]'),
+            $selectedOptions = $ingredientContainer.find('option:selected'),
+            $disabledOptions = $ingredientContainer.find('option:disabled'),
+            selectedValues = [];
+
+        $selectedOptions.each(function () {
+            selectedValues.push($(this).val());
+        });
+
+        $disabledOptions.each(function () {
+            var $option = $(this);
+
+            if (!selectedValues.includes($option.val())) {
+                $option.prop('disabled', false);
+                $option.trigger("chosen:updated");
+            }
+
+        });
+
+        $ingredientContainer.find('option').not(':selected').not(':disabled').each(function () {
+            var $option = $(this);
+
+            if (selectedValues.includes($option.val())) {
+                $option.prop('disabled', true);
+                $option.trigger("chosen:updated");
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,77 @@
+<?php if ($successMessages = $this->flashMessenger()->getSuccessMessages()) { ?>
+    <?php foreach ($successMessages as $success) { ?>
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        showMethod: 'slideDown',
+                        timeOut: 4000,
+                        positionClass: 'toast-bottom-right'
+                    };
+                    toastr.success('<?= $success ?>');
+                }, 1300);
+            });
+        </script>
+    <?php } ?>
+<?php } ?>
+
+<?php if ($infoMessages = $this->flashMessenger()->getInfoMessages()) { ?>
+    <?php foreach ($infoMessages as $info) { ?>
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        showMethod: 'slideDown',
+                        timeOut: 4000,
+                        positionClass: 'toast-bottom-right'
+                    };
+                    toastr.info('<?= $info ?>');
+                }, 1300);
+            });
+        </script>
+    <?php } ?>
+<?php } ?>
+
+<?php if ($errorMessages = $this->flashMessenger()->getErrorMessages()) { ?>
+    <?php foreach ($errorMessages as $error) { ?>
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        showMethod: 'slideDown',
+                        timeOut: 4000,
+                        positionClass: 'toast-bottom-right'
+                    };
+                    toastr.error('<?= $error ?>');
+                }, 1300);
+            });
+        </script>
+    <?php } ?>
+<?php } ?>
+
+<?php if ($warningMessages = $this->flashMessenger()->getWarningMessages()) { ?>
+    <?php foreach ($warningMessages as $warning) { ?>
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    toastr.options = {
+                        closeButton: true,
+                        progressBar: true,
+                        showMethod: 'slideDown',
+                        timeOut: 4000,
+                        positionClass: 'toast-bottom-right'
+                    };
+                    toastr.warning('<?= $warning ?>');
+                }, 1300);
+            });
+        </script>
+    <?php } ?>
+<?php } ?>
+
+<?php $this->flashMessenger()->getPluginFlashMessenger()->clearCurrentMessages() ?>

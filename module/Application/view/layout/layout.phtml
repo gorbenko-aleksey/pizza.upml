@@ -1,0 +1,58 @@
+<?= $this->doctype() ?>
+<html lang="en-gb" xml:lang="en-gb" class="no-js">
+    <head>
+        <? $this->headMeta()
+            ->setCharset('utf-8')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+            ->appendName('viewport', 'width=device-width, initial-scale=1')
+        ?>
+
+        <? $this->seoData() ?>
+        <?= $this->headMeta() ?>
+        <?= $this->headTitle() ?>
+
+        <?= $this
+            ->headLink(['rel' => 'apple-touch-icon-precomposed', 'sizes' => '144x144', 'href' => $this->basePath('skins/application/assets/ico/apple-touch-icon-144-precomposed.png')])
+            ->headLink(['rel' => 'shortcut icon', 'href' => $this->basePath('skins/application/assets/ico/favicon.ico')])
+            ->appendStylesheet($this->basePath('skins/application/assets/font-awesome/font-awesome/css/font-awesome.min.css'))
+            ->appendStylesheet('http://fonts.googleapis.com/css?family=Vollkorn:400,700,400italic,700italic%7CPlayfair+Display:400,700')
+            ->appendStylesheet($this->basePath('skins/application/assets/bootstrap/css/bootstrap.min.css'))
+            ->appendStylesheet($this->basePath('skins/application/assets/owl-carousel2/assets/owl.carousel.css'))
+            ->appendStylesheet($this->basePath('skins/application/assets/flexslider/flexslider.css'))
+            ->appendStylesheet($this->basePath('skins/application/assets/lightbox/css/lightbox.css'))
+            ->appendStylesheet($this->basePath('skins/application/assets/styles/main.css'))
+            ->appendStylesheet($this->basePath('skins/application/assets/styles/white.css'))
+            ->appendStylesheet($this->basePath('js/intl-tel-input/css/intlTelInput.css'))
+        ?>
+
+        <?= $this->headScript()
+            ->appendFile('https://code.jquery.com/jquery-3.3.1.min.js')
+            ->appendFile($this->basePath('skins/application/assets/js/modernizr-custom.min.js'))
+            ->appendFile('//html5shim.googlecode.com/svn/trunk/html5.js', '', ['conditional' => 'lt IE 9'])
+        ?>
+    </head>
+
+    <body>
+        <?= $this->cart() ?>
+
+        <?= $this->header() ?>
+        
+        <?= $this->content ?>
+
+        <?= $this->footer() ?>
+
+        <?= $this->inlineScript()
+            ->appendFile($this->basePath('skins/application/assets/js/jquery-1.11.3.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/bootstrap/js/bootstrap.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/owl-carousel2/owl.carousel.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/retina/retina.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/lightbox/js/lightbox.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/flexslider/jquery.flexslider-min.js'))
+            ->appendFile($this->basePath('skins/application/assets/js/isotope.pkgd.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/js/jquery.scrollTo.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/js/jquery.nav.min.js'))
+            ->appendFile($this->basePath('skins/application/assets/js/custom.js'))
+            ->appendFile($this->basePath('js/intl-tel-input/js/intlTelInput.js'))
+        ?>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+<ul>
+    <? foreach ($this->container as $page) { ?>
+        <li>
+            <a href="<?= $page->getHref() ?>">
+                <?= $page->getLabel() ?>
+            </a>
+        </li>
+    <? } ?>
+</ul>

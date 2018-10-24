@@ -1,0 +1,14 @@
+config/autoload/*.local-development.php
+config/development.config.php
+config/autoload/*.local.php
+config/autoload/local.php
+!data/cache/.gitkeep
+data/cache/*
+vendor/
+.idea/
+/nbproject/
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/ckfinder/.gitkeep
+!public/js/ckfinder/core/connector/php/vendor/
+/composer.lock

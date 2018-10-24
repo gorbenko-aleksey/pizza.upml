@@ -1,0 +1,55 @@
+<?php
+/**
+ * @var $element \Zend\Form\Element
+ */
+$hiddenElements = [];
+?>
+<tr class="text-left" data-name="<?= $this->parsedFieldsetName ?>">
+<?php foreach ($this->fieldSet->getElements() as $element) { ?>
+    <?php
+    if ($element instanceof \Zend\Form\Element\Hidden) {
+        $hiddenElements[] = $element;
+        continue;
+    }
+
+    $classes = ['form-control'];
+    $messages = $element->getMessages();
+
+    if (!empty($messages)) {
+        $classes[] = 'error';
+    }
+
+    if ($element instanceof \Zend\Form\Element\Select) {
+        $classes[] = 'chosen-select';
+    }
+
+    $element->setAttributes(['class' => implode(' ', $classes)]);
+    $element->setOptions(['label_attributes' => ['class' => 'col-sm-2 control-label']]);
+    ?>
+    <td>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <?= $this->formElement($element) ?>
+                <div class="errors">
+                    <?php foreach ($element->getMessages() as $message) { ?>
+                        <label id="" class="error" for="min>"><?= $message ?></label><br>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </td>
+<?php } ?>
+    <td class="text-center">
+        <button class="btn btn-link delete"
+                data-row-name="<?= $this->parsedFieldsetName ?>"
+                onclick="removeIngredient(this);"
+        >
+            <i class="fa fa-remove" title="<?= $this->translate('Delete') ?>"></i>
+        </button>
+        <?php
+        foreach ($hiddenElements as $hiddenElement) {
+            echo $this->formElement($hiddenElement);
+        }
+        ?>
+    </td>
+</tr>

@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title><?= $this->translate('New password') ?></title>
+    </head>
+    <body>
+        <table class="body-wrap">
+            <tr>
+                <td></td>
+                <td class="container" width="600">
+                    <div class="content">
+                        <table class="main" width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="content-wrap">
+                                    <table  cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td>
+                                                Hello,<br />
+                                                you are receiving the following notification from the <?= $this->url('home', [], ['force_canonical' => true]) ?> website.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Your password has changed, new data for login is:<br>
+                                                <strong>Login:</strong> <a href="mailto:<?= $this->email ?>"><?= $this->email ?></a><br/>
+                                                <strong>Password:</strong> <?= $this->password ?><br/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                For your security please do not share your login.<br />
+                                                Best wishes from AwsomeSnacks team!
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </body>
+</html>

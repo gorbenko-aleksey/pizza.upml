@@ -1,0 +1,99 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><?= $this->translate('List of recipes') ?></h5>
+                <div class="btn-group pull-right">
+                    <div>
+                        <a href="<?= $this->urlWithParams('admin/recipe/edit', ['id' => 0]) ?>" class="btn-primary btn btn-xs">
+                            <?= $this->translate('Create') ?>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover dataTable use-sorting">
+                        <thead>
+                        <tr>
+                            <th class="sorting_asc sort" data-name="name" data-sort="asc"><?= $this->translate('Name') ?></th>
+                            <th><?= $this->translate('Ingredients, kg') ?></th>
+                            <th class="sorting sort text-center" data-name="product_weight" data-sort="asc"><?= $this->translate('Product weight, kg') ?></th>
+                            <th id="actions" class="text-center"><?= $this->translate('Actions') ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php if ($this->paginator->count()) { ?>
+                            <?php foreach ($this->paginator as $row) { ?>
+                                <tr>
+                                    <td><?= $row->getName() ?></td>
+                                    <td>
+                                        <?
+                                            $lastIngredientKey = $row->getReceiptIngredientWeights()->count() - 1;
+                                            foreach ($row->getReceiptIngredientWeights() as $key => $row2) {
+                                                echo $row2->getIngredient()->getName() . ': ' 
+                                                    . $this->weightFormatter($row2->getWeight());
+                                                echo ($key !== $lastIngredientKey) ? '<br/>' : '';
+                                            }
+                                        ?>
+                                    </td>
+                                    <td class="text-center"><?= $this->weightFormatter($row->getProductWeight()) ?></td>
+                                    <td class="text-center">
+                                        <a href="<?= $this->urlWithParams('admin/recipe/edit', ['id' => $row->getId()]) ?>">
+                                            <i class="fa fa-pencil" title="<?= $this->translate('Edit') ?>"></i>
+                                        </a>
+                                        /
+                                        <a href="javascript:void(0);"
+                                           data-url="<?= $this->urlWithParams('admin/recipe/delete', ['id' => $row->getId()]) ?>"
+                                           data-id="<?= $row->getId() ?>" class="delete">
+                                           <i class="fa fa-remove" title="<?= $this->translate('Delete') ?>"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="3" class="text-center"><?= $this->translate('No records found') ?></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                    <div>
+                        <?= $this->adminRowsPerPage() ?>
+                        <?= $this->adminPagination($this->paginator) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.delete').on('click', function () {
+            var url = $(this).data('url');
+            swal({
+                title: "<?= $this->translate('Are you sure?') ?>",
+                text: "<?= $this->translate('You will not be able to recover this recipe!') ?>",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "<?= $this->translate('Yes, delete it!') ?>",
+                cancelButtonText: "<?= $this->translate('Cancel') ?>",
+                closeOnConfirm: false
+            }, function () {
+                location.href = url;
+            });
+        });
+
+        $('input[name="filter_created_from"]').datetimepicker({
+            format:'Y-m-d H:i',
+            defaultTime:'00:00'
+        });
+
+        $('input[name="filter_created_to"]').datetimepicker({
+            format:'Y-m-d H:i',
+            defaultTime:'23:59'
+        });
+    });
+</script>

@@ -1,0 +1,22 @@
+<?php foreach ($this->container as $level1) { ?>
+    <?php if ($this->navigation()->menu()->accept($level1)) { ?>
+        <li class="<?= $level1->isActive(true) ? 'active' : '' ?>">
+            <a href="<?= $level1->getHref() ?>">
+                <i class="<?= $level1->getClass() ?>"></i>
+                <span class="nav-label"><?= $level1->getLabel() ?></span>
+                <?= ($level1->hasPages(true)) ? '<span class="fa arrow"></span>' : '' ?>
+            </a>
+            <?php if ($level1->hasPages(true)) { ?>
+                <ul class="nav nav-second-level collapse">
+                    <?php foreach ($level1 as $level2) { ?>
+                        <?php if ($this->navigation()->menu()->accept($level2)) { ?>
+                            <li class="<?= $level2->isActive(true) ? 'active' : '' ?>">
+                                <?= $this->navigation()->menu()->htmlify($level2) ?>
+                            </li>
+                        <?php } ?>
+                    <?php } ?>
+                </ul>
+            <?php } ?>
+        </li>
+    <?php } ?>
+<?php } ?>

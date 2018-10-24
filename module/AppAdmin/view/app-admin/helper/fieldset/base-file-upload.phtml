@@ -1,0 +1,27 @@
+<?php
+$prefix = $this->fieldSet->getName();
+
+$file = $this->fieldSet->get('file');
+$file->setOptions(['label_attributes' => ['class' => 'col-sm-2 control-label']]);
+?>
+
+<div class="form-group"><?= $this->formLabel($file) ?>
+    <div class="col-sm-10">
+        <?php if ($this->resource) { ?>
+            <img src="<?= $this->createPreviewSrc($this->resource, null, 100) ?>">
+            <?= $this->formElement($this->fieldSet->get('remove')) ?>
+            <?= $this->formLabel($this->fieldSet->get('remove')) ?>
+        <?php } ?>
+        <div class="fileinput fileinput-new" data-provides="fileinput">
+                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                <span
+                    class="fileinput-exists">Change</span><?= $this->formElement($file) ?></span>
+            <span class="fileinput-filename"></span>
+        </div>
+        <div class="errors">
+            <?php foreach ($file->getMessages() as $message) { ?>
+                <label id="" class="error" for="min"><?= $message ?></label><br>
+            <?php } ?>
+        </div>
+    </div>
+</div>

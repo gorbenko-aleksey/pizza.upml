@@ -1,0 +1,108 @@
+<?= $this->form()->openTag($this->form) ?>
+
+<?php
+$formMessages = $this->form->getFormMessages();
+?>
+
+<?php if ($formMessages) { ?>
+    <div class="errors">
+    <?php foreach ($formMessages as $message) { ?>
+        <div class="alert alert-danger">
+            <h4>Error</h4>
+            <p><?= $message ?></p>
+        </div>
+    <?php } ?>
+    </div>
+<?php } ?>
+
+<?php foreach ($this->inputs as $element) { ?>
+    <?php
+    $classes = ['form-control'];
+    $messages = $element->getMessages();
+
+    if (!empty($messages)) {
+        $classes[] = 'error';
+    }
+
+    if ($element instanceof \Zend\Form\Element\Select) {
+        $classes[] = 'chosen-select';
+    }
+
+    $element->setAttributes(['class' => implode(' ', $classes)]);
+    $element->setOptions(['label_attributes' => ['class' => 'col-sm-2 control-label']]);
+    $labelText = $element->getLabel() . ($form->getInputFilter()->get($element->getName())->isRequired() ? ' *' : '');
+    ?>
+    <div class="form-group"><?= $this->formLabel($element, $labelText) ?>
+        <div class="col-sm-10">
+            <?php if ($element instanceof \Zend\Form\Element\Checkbox) { ?>
+                <div class="i-checks">
+                    <label>
+                        <div class="icheckbox_square-green">
+                            <?= $this->formElement($element) ?>
+                            <ins class="iCheck-helper"></ins>
+                        </div>
+                    </label>
+                </div>
+            <?php } else { ?>
+                <?= $this->formElement($element) ?>
+            <?php } ?>
+            <div class="errors">
+                <?php foreach ($messages as $message) { ?>
+                    <label id="" class="error" for="min"><?= $message ?></label><br>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<?php foreach ($this->form->getFieldsets() as $fieldSet) {
+    $name = $fieldSet->getName();
+
+    if (!isset($this->fieldSetsScripts[$name])) {
+        continue;
+    }
+
+    $options = $this->fieldSetsScripts[$name];
+
+    echo $this->render($options['script'], [
+        'fieldSet' => $fieldSet,
+        'form' => $this->form,
+        'resource' => $options['resource'],
+    ]);
+} ?>
+
+<div class="row text-center">
+    <?php foreach ($this->buttons as $element) {
+        $classes = ['btn'];
+        if ($element->getAttribute('name') == 'save') {
+            $classes[] = 'btn-primary';
+            $classes[] = 'ladda-button';
+        }
+        $element->setAttributes(['class' => implode(' ', $classes), 'data-style' => 'zoom-in']);
+        ?>
+        <?php if (count($this->buttons) > 1) { ?>
+            <div class="col-xs-6 text-<?= ($element->getAttribute('name') == 'save') ? 'right' : 'left' ?>">
+        <?php } ?>
+        <?= $this->formElement($element) ?>
+        <?php if (count($this->buttons) > 1) { ?>
+            </div>
+        <?php } ?>
+    <?php } ?>
+</div>
+<?= $this->form()->closeTag($this->form) ?>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var l = $('.ladda-button').ladda();
+        l.click(function () {
+            l.ladda('start');
+            l.parents('form').submit();
+        });
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green'
+        });
+
+        $('.chosen-select').chosen({width: "100%"});
+    });
+</script>

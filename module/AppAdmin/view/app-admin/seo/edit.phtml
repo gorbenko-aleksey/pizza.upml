@@ -1,0 +1,47 @@
+<div class="alert alert-warning">
+    <h4><?= $this->translate('Url pattern help') ?></h4>
+    <table  border="1px solid #827878;" class="hint_seo_regex_table">
+        <tr>
+            <td><?= $this->translate('Seo rule is applied to pages if it satisfies requirements: at coincidence of the site specified in the "Site name" and if part of the url after the host matches the pattern specified in the "Pattern". Url is the address of the page; for example part "awsumsnacks.com" in the page address "https://awsumsnacks.com/admin-seo/edit/id/1/" is a host and it will be compared with the "Site name"; and "/admin-seo/edit/id/1/" is a part of the url which will be compared with the template. Keywords are {parent} - the string value to the application of the rules, {title} - the title of the current display element, {keywords} - his keywords, {description} - description. If the rule contains an empty field - the value remains unchanged. To clear the field using {empty}.') ?></td>
+        </tr>
+    </table>
+
+    <table border="1px solid #827878;" class="hint_seo_regex_table">
+        <tr>
+            <td>/.*/</td>
+            <td><?= $this->translate('It is used for seo rules for all pages of the site.') ?></td>
+        </tr>
+        <tr>
+            <td>/\/admin/</td>
+            <td><?= $this->translate('This is used to apply seo rules for pages that have "/admin" in url.') ?></td>
+        </tr>
+        <tr>
+            <td>/\/admin-seo/</td>
+            <td><?= $this->translate('This is used to apply seo rules for pages that have "/admin-seo" in url.') ?></td>
+        </tr>
+    </table>
+
+    <table  border="1px solid #827878;" class="hint_seo_regex_table">
+        <tr>
+            <td><?= $this->translate('To test your templates, you can use') ?>
+                <a href="https://regex101.com/" target="_blank"><?= $this->translate('this online service.') ?></a>
+                <?= $this->translate('In order to do this, enter your pattern (without characters "/" at the beginning and end of the line) into the upper input field; and enter url of the page (that you want to apply the rule to) into the input box below. If the rule finds a match, the part of the url will be highlighted and such rule will be applied to the page. ') ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="tabs-container">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="panel-body">
+                        <fieldset class="form-horizontal">
+                            <?= $this->adminRenderForm($this->form) ?>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

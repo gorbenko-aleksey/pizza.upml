@@ -1,0 +1,34 @@
+<?php
+    $tabs = [
+        'general' => [
+            'title' => $this->translate('General'),
+            'fields' => ['name', 'description', 'product_weight']
+        ],
+        'ingredients' => [
+            'title' => $this->translate('Ingredients'),
+            'fields' => ['receipt_ingredient_weights'],
+            'options' => [
+                'receipt_ingredient_weights' => [
+                    'script' => 'app-admin/helper/table-ingredients-tab',
+                    'resource' => 'receipt_ingredient_weights'
+                ],
+            ],
+        ],
+    ]
+?>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="tabs-container">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="panel-body">
+                        <fieldset class="form-horizontal">
+                            <?= $this->adminRenderTabForm($this->form, $tabs) ?>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

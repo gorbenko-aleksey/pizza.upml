@@ -1,0 +1,23 @@
+<span class="limit"><?= $this->translate('Rows per page') ?>:</span>
+<ul class="pagination limit">
+    <li class="<?= ($this->limit == 10) ? 'active' : '' ?>">
+        <a href="javascript:void(0);" data-filter-name="limit" data-filter-value="10">10</a>
+    </li>
+    <li class="<?= ($this->limit == 20) ? 'active' : '' ?>">
+        <a href="javascript:void(0);" data-filter-name="limit" data-filter-value="20">20</a>
+    </li>
+    <li class="<?= ($this->limit == 30) ? 'active' : '' ?>">
+        <a href="javascript:void(0);" data-filter-name="limit" data-filter-value="30">30</a>
+    </li>
+    <li class="<?= ($this->limit == 50) ? 'active' : '' ?>">
+        <a href="javascript:void(0);" data-filter-name="limit" data-filter-value="50">50</a>
+    </li>
+</ul>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('ul.pagination.limit li a').click(function () {
+            location.href = location.pathname + app.utils.createSearchUrl($(this).data('filter-name'), $(this).data('filter-value'));
+        });
+    });
+</script>

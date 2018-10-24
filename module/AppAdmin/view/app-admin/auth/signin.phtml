@@ -1,0 +1,73 @@
+<?php $this->form->prepare() ?>
+<?= $this->form()->openTag($this->form) ?>
+<div class="form-group">
+    <?php
+        $email = $this->form->get('email');
+        $emailMessages = $this->form->getMessages('email');
+        $email->setAttributes(
+            [
+                'id'       => 'email',
+                'required' => 'required',
+                'class'    => 'form-control' . (count($emailMessages) ? ' error' : ''),
+            ]
+        )
+    ?>
+    <?= $this->formElement($email) ?>
+    <?php if (count($emailMessages)) { ?>
+        <label class="error" for="email"><?= array_shift($emailMessages) ?></label>
+    <?php } ?>
+</div>
+<div class="form-group">
+    <?php
+        $password = $this->form->get('password');
+        $passwordMessages = $this->form->getMessages('password');
+        $password->setAttributes(
+            [
+                'id'       => 'password',
+                'required' => 'required',
+                'class'    => 'form-control' . (count($passwordMessages) ? ' error' : ''),
+
+            ]
+        )
+    ?>
+    <?= $this->formElement($password) ?>
+    <?php if (count($passwordMessages)) { ?>
+        <label class="error" for="password"><?= array_shift($passwordMessages) ?></label>
+    <?php } ?>
+</div>
+<div class="form-group remember">
+    <div class="pull-left">
+        <?php
+            $rememberMe = $this->form->get('remember_me')->setAttributes(
+                ['id' => 'remember_me', 'class' => 'js-switch']
+            )
+        ?>
+        <?= $this->formElement($rememberMe) ?>
+        <?= $this->formLabel($rememberMe) ?>
+    </div>
+    <div class="pull-right">
+        <a href="<?= $this->url('admin/forgot-password') ?>">
+            <?= $this->translate('Forgot password?') ?>
+        </a>
+    </div>
+</div>
+<div class="save">
+    <?php
+        $this->form->get('save')->setAttributes(
+            ['class' => 'btn btn-primary block full-width ladda-button', 'data-style' => 'zoom-in']
+        )
+    ?>
+    <?= $this->formElement($this->form->get('save')) ?>
+</div>
+<?= $this->form()->closeTag() ?>
+
+<script>
+    $(document).ready(function () {
+        new Switchery(document.querySelector('.js-switch'), {color: '#1AB394', size: 'small'});
+        var l = $('.ladda-button').ladda();
+        l.click(function () {
+            l.ladda('start');
+            l.parents('form').submit();
+        });
+    });
+</script>

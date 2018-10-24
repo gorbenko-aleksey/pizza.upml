@@ -1,0 +1,120 @@
+<div class="ibox float-e-margins">
+    <div class="ibox-title  collapse-link cursor-pointer">
+        <h5><?= $this->translate('Filters') ?></h5>
+        <div class="ibox-tools">
+            <a>
+                <i class="fa <?= $this->form->filterIsEnabled() ? 'fa-chevron-up' : 'fa-chevron-down' ?>"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="ibox-content" style="<?= $this->form->filterIsEnabled() ? '' : 'display: none;' ?>">
+        <?= $this->form()->openTag($this->form) ?>
+
+        <div>
+            <?php foreach ($this->rows as $row) { ?>
+                <div class="row">
+                <?php foreach ($row as $element) { ?>
+
+                    <?php
+                        $classes = ['form-control'];
+                        if ($element instanceof \Zend\Form\Element\Select) {
+                            $classes[] = 'chosen-select';
+                        }
+                        $element->setAttributes(['class' => implode(' ', $classes)]);
+                        $element->setOptions(['label_attributes' => ['class' => 'control-label']]);
+                    ?>
+
+                    <div class="col-sm-<?= $cols ?>">
+                        <div class="form-group">
+                            <?php
+                            if($element->getLabel()) {
+                                echo $this->formLabel($element);
+                            }
+                            ?>
+                            <?= $this->formElement($element) ?>
+                        </div>
+                    </div>
+                <?php } ?>
+                </div>
+            <?php } ?>
+            <div class="row">
+                <?php foreach ($this->hidden as $element) { ?>
+                    <?= $this->formElement($element) ?>
+                <?php } ?>
+                <?php
+                    $search = $this->form->get('search');
+                    $search->setAttributes([
+                        'data-style' => 'zoom-in',
+                        'class'      => 'btn btn-primary ladda-button',
+                    ]);
+                    $reset = $this->form->get('reset');
+                    $reset->setAttribute('class', 'btn');
+                ?>
+                <?php if($this->form->filterIsEnabled()) { ?>
+                    <div class="col-xs-6 text-right">
+                        <?= $this->formElement($search) ?>
+                    </div>
+                    <div class="col-xs-6 text-left">
+                        <?= $this->formElement($reset) ?>
+                    </div>
+                <?php } else { ?>
+                    <div class="col-sm-12 text-center">
+                        <?= $this->formElement($search) ?>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <?= $this->form()->closeTag($this->form) ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    app.events.BEFORE_BUILD_SEARCH_QUERY = 'before-build-search-query';
+
+    $(document).ready(function () {
+        var $form = $('form[name="filter"]');
+
+        $('.chosen-select').chosen({width: "100%"});
+
+        $form.find('button[type="submit"]').on('click', function(e){
+            e.preventDefault();
+
+            $form.find('[name="filter-on"]').val('true');
+
+            var data = $form.serializeArray(),
+                search = location.search;
+
+            $.each(data, function () {
+                var objectData = {
+                    name: this.name,
+                    value: this.value
+                };
+
+                $form.trigger(app.events.BEFORE_BUILD_SEARCH_QUERY, [objectData]);
+
+                search = app.utils.createSearchUrl(this.name, $.trim(this.value), search);
+            });
+
+            location.search = search;
+        });
+
+        $form.find('button[type="reset"]').on('click', function(e){
+            e.preventDefault();
+
+            var params = app.utils.getSearchParam(null),
+                clearParams = [],
+                key;
+
+            for (key in params) {
+                if (key.indexOf('filter') === 0) {
+                    continue;
+                }
+
+                clearParams[key] = params[key];
+            }
+
+            location.search = app.utils.toSearchParams(clearParams);
+        });
+    });
+</script>

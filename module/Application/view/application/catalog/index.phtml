@@ -1,0 +1,53 @@
+<div class="page-title-img">
+    <img class="img-full" alt="page title img" src="<?= $this->basePath('skins/application/assets/images/headers/menu.png') ?>">
+    <div class="page-title">
+        <div class="container">
+            <h1>Menu</h1>
+            <p>Lorem ipsum dolor sit amet</p>
+        </div><!-- .container -->
+    </div>
+</div><!-- .page-title-img -->
+
+<section class="section-gray">
+    <div class="container">
+        <? foreach ($this->categories as $category) { ?>
+            <div class="border-lines-container">
+                <h5 class="border-lines"><?= $category->getName() ?></h5>
+            </div>
+            <? foreach ($category->getProducts() as $key => $product) { ?>
+                <? $i = 0 ?>
+                <? if ($product->getStatus()) { ?>
+                    <? $i++ ?>
+                    <? if ($i == 1) { ?>
+                        <div class="row">
+                    <? } ?>
+                    <div class="col-md-4">
+                        <div class="product-preview">
+                            <div class="product-photo">
+                                <div class="product-price">
+                                    <? list($dollars, $cents) = explode('.', $product->getPrice()) ?>
+                                    <sub>$</sub><?= $dollars ?>.<sup><?= $cents ?></sup>
+                                </div>
+                                <? if ($product->getImage()) { ?>
+                                    <img src="<?= $this->createPreviewSrc($product->getImage(), 352, 328) ?>">
+                                <? } else { ?>
+                                    <img alt="product" src="<?= $this->basePath('skins/application/assets/images/products/1.png') ?>">
+                                <? } ?>
+                            </div>
+                            <h3 class="product-title"><?= $product->getName() ?></h3>
+                            <p class="product-info"><?= $product->getShortDescription() ?></p>
+                            <a href="javascript:void(0);" class="cart-add button-clean button-text-small"
+                               data-id="<?= $product->getId() ?>">
+                                Order now
+                            </a>
+                        </div><!-- .product-preview -->
+                    </div><!-- .col-md-4 -->
+                    <? if ($i == 3 || ($key + 1) == $category->getProducts()->count()) { ?>
+                        </div><!-- .row -->
+                        <? $i = 0 ?>
+                    <? } ?>
+                <? } ?>
+            <? } ?>
+        <? } ?>
+    </div><!-- .container -->
+</section>

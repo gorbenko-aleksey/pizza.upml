@@ -1,0 +1,56 @@
+<?php if ($this->pageCount > 1) { ?>
+    <ul class="pagination offset pull-right">
+        <!-- First page link -->
+        <?php if (isset($this->first)) { ?>
+            <li>
+                <a href="javascript:void(0);" data-filter-name="offset" data-filter-value="<?= $this->first ?>">
+                    <?= $this->translate('First') ?>
+                </a>
+            </li>
+        <?php } ?>
+
+        <!-- Previous page link -->
+        <?php if (isset($this->previous)) { ?>
+            <li>
+                <a href="javascript:void(0);" data-filter-name="offset" data-filter-value="<?= $this->previous ?>">
+                    <?= $this->translate('Previous') ?>
+                </a>
+            </li>
+        <?php } ?>
+
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page) { ?>
+            <li class="<?= ($this->current == $page) ? 'active' : '' ?>">
+                <a href="javascript:void(0);" data-filter-name="offset" data-filter-value="<?= $page ?>">
+                    <?= $page ?>
+                </a>
+            </li>
+        <?php } ?>
+
+        <!-- Next page link -->
+        <?php if (isset($this->next)) { ?>
+            <li>
+                <a href="javascript:void(0);" data-filter-name="offset" data-filter-value="<?= $this->next ?>">
+                    <?= $this->translate('Next') ?>
+                </a>
+            </li>
+        <?php } ?>
+
+        <!-- Last page link -->
+        <?php if (isset($this->last)) { ?>
+            <li>
+                <a href="javascript:void(0);" data-filter-name="offset" data-filter-value="<?= $this->last ?>">
+                    <?= $this->translate('Last') ?>
+                </a>
+            </li>
+        <?php } ?>
+    </ul>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('ul.pagination.offset li a').click(function () {
+                location.href = location.pathname + app.utils.createSearchUrl($(this).data('filter-name'), $(this).data('filter-value'));
+            });
+        });
+    </script>
+<?php } ?>

@@ -1,0 +1,26 @@
+<div class="product-preview-small">
+    <div class="product-img">
+        <? if ($product->getProduct()->getImage()) { ?>
+            <img src="<?= $this->createPreviewSrc($product->getProduct()->getImage(), 83, 76) ?>">
+        <? } else { ?>
+            <img alt="product photo" src="/skins/application/assets/images/products/1_small.png">
+        <? } ?>
+    </div>
+    <div class="product-content">
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="product-title"><?= $product->getProduct()->getName() ?></h4>
+                $<?= $product->getPrice() ?>/, order
+                <div class="product-pieces">
+                    <input type="text" value="<?= $product->getQuantity() ?>">
+                    <div class="product-pieces-up" data-id="<?= $product->getProduct()->getId() ?>"></div>
+                    <div class="product-pieces-down" data-id="<?= $product->getProduct()->getId() ?>"></div>
+                </div>
+                pieces
+            </div>
+            <div class="col-md-4 product-price">
+                $<?= $product->getTotalPrice() ?>
+            </div>
+        </div>
+    </div><!-- .product-content -->
+</div><!-- .product-preview-small -->
