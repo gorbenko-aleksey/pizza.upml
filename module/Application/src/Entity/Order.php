@@ -21,7 +21,8 @@ class Order extends Entity\AbstractEntity
     const STATUS_DELETED   = 0;
     const STATUS_CREATED   = 1;
     const STATUS_APPROVED  = 2;
-    const STATUS_COMPLETED = 3;
+    const STATUS_COOKED    = 3;
+    const STATUS_DELIVERED = 4;
 
     /**
      * @var int

@@ -11,6 +11,7 @@ use Application\Repository\Order as OrderRepository;
 use AppAdmin\Form\Order\Filter as FilterForm;
 use AppAdmin\Form\Sorter as SorterForm;
 use App\Provider\Form as FormProvider;
+use App\Repository\Plugin\Filter\Parameter as FilterParameter;
 
 class OrderController extends AbstractActionController
 {
@@ -48,12 +49,36 @@ class OrderController extends AbstractActionController
         $this->filterForm->setData($this->getRequest()->getQuery()->toArray())->isValid();
         $this->sorterForm->setData($this->getRequest()->getQuery()->toArray())->isValid();
 
-        $parameters = array_merge($this->filterForm->prepareAndGetData(), $this->sorterForm->prepareAndGetData());
+        if (($status = $this->identity()->getOrderStatusForView())) {
+            $fs = new FilterParameter('status', $status);
+        } else {
+            $fs = null;
+        }
+
+        $parameters = array_merge([$fs], $this->filterForm->prepareAndGetData(), $this->sorterForm->prepareAndGetData());
         $paginator  = $this->orderRepository->paginatorFetchAll($limit, $offset, $parameters);
 
         return new ViewModel([
             'paginator' => $paginator,
             'filter' => $this->filterForm,
         ]);
+    }
+
+    public function deleteAction()
+    {
+        $id = (int) $this->params('id');
+        $order = $this->orderRepository->find($id);
+
+        if (!$order) {
+            $this->flashMessenger()->addErrorMessage($this->translator()->translate('Order was not found'));
+
+            return $this->comeBack();
+        }
+
+        $order->setStatus(OrderEntity::STATUS_DELETED);
+        $this->orderRepository->save($order);
+        $this->flashMessenger()->addSuccessMessage($this->translator()->translate('Order has been deleted'));
+
+        return $this->comeBack();
     }
 }

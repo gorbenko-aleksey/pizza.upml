@@ -8,7 +8,7 @@ use App\Entity;
  * OrderProduct
  *
  * @ORM\Table(name="order_product")
- * @ORM\Entity(repositoryClass="Application\Repository\OrderProduct")
+ * @ORM\Entity
  */
 class OrderProduct extends Entity\AbstractEntity
 {

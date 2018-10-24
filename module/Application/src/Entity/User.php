@@ -270,28 +270,6 @@ class User extends Entity\AbstractEntity implements Property\CreatorInterface, P
     }
 
     /**
-     * @return string
-     */
-    public function getFullName()
-    {
-        return $this->firstName . ' ' . $this->lastName;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCoworker()
-    {
-        foreach ([UserRole::OPERATOR, UserRole::COOK, UserRole::DRIVER, UserRole::ADMIN] as $coworker) {
-            if (in_array($coworker, array_keys($this->getRoleList()))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @return DateTime
      */
     public function getPasswordChangedAt()
@@ -300,7 +278,7 @@ class User extends Entity\AbstractEntity implements Property\CreatorInterface, P
     }
 
     /**
-     * @param DateTime $passChangedAt|null
+     * @param DateTime $passChangedAt
      *
      * @return $this
      */
@@ -418,5 +396,77 @@ class User extends Entity\AbstractEntity implements Property\CreatorInterface, P
         $this->createSecret(true);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCoworker()
+    {
+        if ($this->isOperator() || $this->isCook() || $this->isDriver() || $this->isAdmin()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return int|bool
+     */
+    public function getOrderStatusForView()
+    {
+        if ($this->isOperator()) {
+            return Order::STATUS_CREATED;
+        }
+
+        if ($this->isCook()) {
+            return Order::STATUS_APPROVED;
+        }
+
+        if ($this->isDriver()) {
+            return Order::STATUS_COOKED;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return in_array(UserRole::ADMIN, array_keys($this->getRoleList()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDriver()
+    {
+        return in_array(UserRole::DRIVER, array_keys($this->getRoleList()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCook()
+    {
+        return in_array(UserRole::COOK, array_keys($this->getRoleList()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOperator()
+    {
+        return in_array(UserRole::OPERATOR, array_keys($this->getRoleList()));
     }
 }

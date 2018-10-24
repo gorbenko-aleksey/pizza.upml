@@ -199,7 +199,47 @@ return [
                             ],
                         ],
                         'may_terminate' => true,
-                        'child_routes'  => [],
+                        'child_routes'  => [
+                            'edit'   => [
+                                'type'    => Segment::class,
+                                'options' => [
+                                    'route'       => '/edit/[:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9_-]+',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => Controller\OrderController::class,
+                                        'action'     => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'delete' => [
+                                'type'    => Segment::class,
+                                'options' => [
+                                    'route'       => '/delete/[:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9_-]+',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => Controller\OrderController::class,
+                                        'action'     => 'delete',
+                                    ],
+                                ],
+                            ],
+                            'view'   => [
+                                'type'    => Segment::class,
+                                'options' => [
+                                    'route'       => '/view/[:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9_-]+',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => Controller\OrderController::class,
+                                        'action'     => 'view',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'product'                       => [
                         'type'          => Literal::class,
