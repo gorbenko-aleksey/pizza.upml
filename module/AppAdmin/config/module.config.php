@@ -319,6 +319,32 @@ return [
                             ],
                         ],
                     ],
+                    'income' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/income',
+                            'defaults' => [
+                                'controller' => Controller\IncomeController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'edit' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/edit/[:id]',
+                                    'constraints' => [
+                                        'id' => '[0]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => Controller\IncomeController::class,
+                                        'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'recipe'                        => [
                         'type'          => Literal::class,
                         'options'       => [
@@ -571,6 +597,7 @@ return [
                 Controller\CategoryController::class,
                 Controller\ProductController::class,
                 Controller\IngredientController::class,
+                Controller\IncomeController::class,
                 Controller\ReceiptController::class,
                 Controller\WhiteIpController::class,
                 Controller\SeoController::class,
@@ -650,6 +677,18 @@ return [
                     ],
                     [
                         'route'   => 'admin/ingredient/history',
+                        'visible' => false,
+                    ],
+                ],
+            ],
+            [
+                'label' => _('Ingredients income'),
+                'route' => 'admin/income',
+                'resource' => Controller\IncomeController::class,
+                'class' => 'fa fa-indent',
+                'pages' => [
+                    [
+                        'route' => 'admin/income/edit',
                         'visible' => false,
                     ],
                 ],

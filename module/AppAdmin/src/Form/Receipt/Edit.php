@@ -4,18 +4,14 @@ namespace AppAdmin\Form\Receipt;
 
 use App\Hydrator\Strategy\KiloFormatterStrategy;
 use AppAdmin\Form\AbstractEdit;
-use DoctrineModule\Form\Element\ObjectSelect as DoctrineSelect;
 use Zend\Filter;
 use Zend\Form;
 use Zend\InputFilter;
-use Application\Entity\User as UserEntity;
 use Application\Entity\Receipt as ReceiptEntity;
 use Doctrine\ORM\EntityManager;
 use Zend\Validator;
 use App\Entity\EntityNameInterface;
-use Zend\Authentication;
 use DoctrineModule\Validator\NoObjectExists;
-use Zend\I18n\Translator\TranslatorInterface;
 
 class Edit extends AbstractEdit
 {
@@ -25,28 +21,13 @@ class Edit extends AbstractEdit
     protected $em;
 
     /**
-     * @var Authentication\AuthenticationService
-     */
-    private $authenticationService;
-
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * Constructor
+     * Edit constructor.
      *
      * @param EntityManager $em
-     * @param Authentication\AuthenticationService $authenticationService
-     * @param TranslatorInterface $translator
      */
-    public function __construct(EntityManager $em, Authentication\AuthenticationService $authenticationService, TranslatorInterface $translator)
+    public function __construct(EntityManager $em)
     {
         $this->em = $em;
-        $this->authenticationService = $authenticationService;
-        $this->translator = $translator;
-
         parent::__construct('edit_receipt');
         $this->setAttribute('method', 'post');
     }
@@ -203,5 +184,4 @@ class Edit extends AbstractEdit
 
         return $this;
     }
-
 }

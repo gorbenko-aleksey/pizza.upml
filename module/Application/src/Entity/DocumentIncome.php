@@ -10,7 +10,7 @@ use App\Entity;
  * DocumentIncome
  *
  * @ORM\Table(name="document_income")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\DocumentIncome")
  */
 class DocumentIncome extends Entity\AbstractEntity implements Property\CreatorInterface, Property\ChangerInterface
 {
@@ -72,5 +72,67 @@ class DocumentIncome extends Entity\AbstractEntity implements Property\CreatorIn
     public function setIngredients($ingredients)
     {
         $this->ingredients = $ingredients;
+    }
+
+    /**
+     * @param DocumentIncomeIngredient $ingredient
+     *
+     * @return $this
+     */
+    public function addIngredient(DocumentIncomeIngredient $ingredient)
+    {
+        $this->ingredients->add($ingredient);
+
+        $ingredient->setDocument($this);
+
+        return $this;
+    }
+
+    /**
+     * @param DocumentIncomeIngredient $ingredient
+     *
+     * @return $this
+     */
+    public function removeIngredient(DocumentIncomeIngredient $ingredient)
+    {
+        $this->ingredients->removeElement($ingredient);
+
+        return $this;
+    }
+
+    /**
+     * @param Collections\Collection|null $ingredients
+     *
+     * @return $this
+     */
+    public function addIngredients(Collections\Collection $ingredients = null)
+    {
+        if (!$ingredients) {
+            return $this;
+        }
+
+        foreach ($ingredients as $ingredient) {
+            $this->addIngredient($ingredient);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Collections\Collection|null $ingredients
+     *
+     * @return $this
+     */
+    public function removeIngredients(Collections\Collection $ingredients = null)
+    {
+        if (!$ingredients) {
+            return $this;
+        }
+
+        foreach ($ingredients as $ingredient) {
+            $this->removeIngredient($ingredient);
+        }
+
+        return $this;
     }
 }
