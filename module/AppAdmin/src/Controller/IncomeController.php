@@ -4,45 +4,33 @@ namespace AppAdmin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\Repository;
-use Application\Entity;
 use Doctrine\ORM\EntityManager;
 use App\Provider\Form as FormProvider;
-use AppAdmin\Form\Income as IncomeForm;
 use AppAdmin\View\Helper\RowsPerPage;
-use Zend\I18n\Translator\TranslatorInterface;
+use Application\Entity\DocumentIncome as DocumentIncomeEntity;
+use Application\Repository\DocumentIncome as DocumentIncomeRepository;
+use AppAdmin\Form\Income\Edit as EditForm;
 
-/**
- * Class IncomeController
- *
- * @package AppAdmin\Controller
- *
- * @method Entity\User identity
- * @method TranslatorInterface translator
- * @method Plugin\ComeBack comeBack
- */
 class IncomeController extends AbstractActionController
 {
     /**
-     * @var EntityManager
+     * @var EditForm
      */
-    protected $em;
+    protected $editForm;
 
     /**
-     * @var FormProvider
+     * @var DocumentIncomeRepository
      */
-    protected $formProvider;
+    protected $documentIncomeRepository;
 
     /**
-     * IncomeController constructor.
-     *
      * @param EntityManager $em
      * @param FormProvider  $formProvider
      */
     public function __construct(EntityManager $em, FormProvider $formProvider)
     {
-        $this->em = $em;
-        $this->formProvider = $formProvider;
+        $this->documentIncomeRepository = $em->getRepository(DocumentIncomeEntity::class);
+        $this->editForm = $formProvider->provide(EditForm::class);
     }
 
     public function indexAction()
@@ -50,7 +38,7 @@ class IncomeController extends AbstractActionController
         $offset = (int) $this->getRequest()->getQuery('offset', 1);
         $limit = (int) $this->getRequest()->getQuery('limit', RowsPerPage::LIMIT);
 
-        $paginator = $this->getRepository()->paginatorFetchAll($limit, $offset, []);
+        $paginator = $this->documentIncomeRepository->paginatorFetchAll($limit, $offset, []);
 
         return new ViewModel([
             'paginator' => $paginator,
@@ -59,13 +47,12 @@ class IncomeController extends AbstractActionController
 
     public function editAction()
     {
-        /** @var IncomeForm\Edit $form */
-        $form = $this->formProvider->provide(IncomeForm\Edit::class);
+        $id = (int) $this->params('id');
 
         if (($id = (int) $this->params('id'))) {
-            $income = $this->getRepository()->find($id);
+            $income = $this->documentIncomeRepository->find($id);
         } else {
-            $income = new Entity\DocumentIncome();
+            $income = new DocumentIncomeEntity();
         }
 
         if (!$income) {
@@ -74,18 +61,15 @@ class IncomeController extends AbstractActionController
             return $this->comeBack();
         }
 
-        $form->bind($income);
-
+        $this->editForm->bind($income);
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
+            $this->editForm->setData($this->getRequest()->getPost());
 
-            $form->setData($data);
-
-            if ($form->isValid()) {
+            if ($this->editForm->isValid()) {
                 foreach ($income->getIngredients() as $ingredient) {
                     $ingredient->setResidue($ingredient->getWeight());
                 }
-                $this->getRepository()->save($income);
+                $this->documentIncomeRepository->save($income);
 
                 $this->flashMessenger()->addSuccessMessage($this->translator()->translate('Income has been saved'));
 
@@ -93,16 +77,27 @@ class IncomeController extends AbstractActionController
             }
         }
 
+        $this->editForm->prepare();
+
         return new ViewModel([
-            'form' => $form,
+            'form' => $this->editForm,
         ]);
     }
 
-    /**
-     * @return Repository\DocumentIncome
-     */
-    protected function getRepository()
+    public function deleteAction()
     {
-        return $this->em->getRepository(Entity\DocumentIncome::class);
+        $id = (int) $this->params('id');
+        $income = $this->documentIncomeRepository->find($id);
+
+        if (!$income) {
+            $this->flashMessenger()->addErrorMessage($this->translator()->translate('Income was not found'));
+
+            return $this->comeBack();
+        }
+
+        $this->documentIncomeRepository->remove($income);
+        $this->flashMessenger()->addSuccessMessage($this->translator()->translate('Income has been deleted'));
+
+        return $this->comeBack();
     }
 }

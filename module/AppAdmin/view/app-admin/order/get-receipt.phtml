@@ -1,0 +1,20 @@
+<? $receipt = $this->product->getReceiptParams() ?>
+<? if (!empty($receipt['name'])) { ?>
+    <b>Name:</b> <?= $receipt['name'] ?><br>
+<? } ?>
+<? if (!empty($receipt['description'])) { ?>
+    <b>Description:</b> <?= $receipt['description'] ?><br>
+<? } ?>
+<? if (!empty($receipt['product_weight'])) { ?>
+    <b>Product weight:</b> <?= $this->weightFormatter($receipt['product_weight']) ?> <?= $this->translate('kg') ?><br><br>
+<? } ?>
+
+<b>Ingredients</b><br>
+<? if (!empty($receipt['ingredient'])) { ?>
+    <? foreach ($receipt['ingredient'] as $ingredient) { ?>
+        <? if (!empty($ingredient['name'])) { ?>
+            <b><?= $ingredient['name'] ?>:</b> <?= $this->weightFormatter($ingredient['weight']) ?> <?= $this->translate('kg') ?><br>
+        <? } ?>
+    <? } ?>
+<? } ?>
+

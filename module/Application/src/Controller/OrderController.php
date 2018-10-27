@@ -55,7 +55,7 @@ class OrderController extends AbstractActionController
 
             $this->cartService->getAll()->clear();
 
-            return new ViewModel();
+            return $this->getResponse();
         } else {
             return $this->getResponse()->setStatusCode(400);
         }

@@ -30,13 +30,10 @@ class DocumentIncome extends Entity\AbstractEntity implements Property\CreatorIn
     /**
      * @var Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="DocumentIncomeIngredient", mappedBy="DocumentIncome", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="DocumentIncomeIngredient", mappedBy="document", cascade={"persist"}, orphanRemoval=true)
      */
     private $ingredients;
 
-    /**
-     * DocumentIncome constructor.
-     */
     public function __construct()
     {
         $this->ingredients = new Collections\ArrayCollection();
@@ -69,7 +66,7 @@ class DocumentIncome extends Entity\AbstractEntity implements Property\CreatorIn
     /**
      * @param Collections\Collection $ingredients
      */
-    public function setIngredients($ingredients)
+    public function setIngredients(Collections\Collection $ingredients)
     {
         $this->ingredients = $ingredients;
     }
@@ -134,5 +131,21 @@ class DocumentIncome extends Entity\AbstractEntity implements Property\CreatorIn
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsed()
+    {
+        $used = false;
+        foreach ($this->getIngredients() as $ingredient) {
+            if ($ingredient->getWeight() != $ingredient->getResidue()) {
+                $used = true;
+                break;
+            }
+        }
+
+        return $used;
     }
 }

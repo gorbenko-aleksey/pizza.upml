@@ -16,6 +16,7 @@
                         <thead>
                         <tr>
                             <th class="sorting_asc sort" data-name="name" data-sort="asc"><?= $this->translate('Name') ?></th>
+                            <th class="text-center"><?= $this->translate('Residues') ?></th>
                             <th id="actions" class="text-center"><?= $this->translate('Actions') ?></th>
                         </tr>
                         </thead>
@@ -25,15 +26,21 @@
                             foreach ($this->paginator as $row) { ?>
                                 <tr>
                                     <td><?= $row->getName() ?></td>
+                                    <td>
+                                        <?= $this->weightFormatter(isset($this->residues[$row->getId()]) ? $this->residues[$row->getId()] : 0) ?>
+                                        <?= $this->translate('kg') ?>
+                                    </td>
                                     <td class="text-center">
-                                        <a href="<?= $this->urlWithParams('admin/ingredient/edit', ['id' => $row->getId()]) ?>">
-                                            <i class="fa fa-pencil" title="<?= $this->translate('Edit') ?>"></i>
-                                        </a>
-                                        /
-                                        <a href="javascript:void(0);" data-url="<?= $this->urlWithParams('admin/ingredient/delete', ['id' => $row->getId()]) ?>"
-                                           data-id="<?= $row->getId() ?>" class="delete">
-                                            <i class="fa fa-remove red" title="<?= $this->translate('Delete') ?>"></i>
-                                        </a>
+                                        <? if (!$row->isUsed()) { ?>
+                                            <a href="<?= $this->urlWithParams('admin/ingredient/edit', ['id' => $row->getId()]) ?>">
+                                                <i class="fa fa-pencil" title="<?= $this->translate('Edit') ?>"></i>
+                                            </a>
+                                            /
+                                            <a href="javascript:void(0);" data-url="<?= $this->urlWithParams('admin/ingredient/delete', ['id' => $row->getId()]) ?>"
+                                               data-id="<?= $row->getId() ?>" class="delete">
+                                                <i class="fa fa-remove red" title="<?= $this->translate('Delete') ?>"></i>
+                                            </a>
+                                        <? } ?>
                                     </td>
                                 </tr>
                             <?php } ?>

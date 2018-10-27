@@ -88,6 +88,7 @@ class Cart
             ];
             foreach ($product->getReceipt()->getReceiptIngredientWeights() as $receiptIngredientWeight) {
                 $b['ingredient'][] = [
+                    'id' => $receiptIngredientWeight->getIngredient()->getId(),
                     'name' => $receiptIngredientWeight->getIngredient()->getName(),
                     'weight' => $receiptIngredientWeight->getWeight(),
                 ];

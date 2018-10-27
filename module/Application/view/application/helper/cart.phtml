@@ -5,7 +5,7 @@
             <div class="border-lines-container">
                 <h1 class="no-top-margin border-lines">Cart</h1>
             </div>
-            <form action="<?= $this->url('order') ?>" method="post">
+            <form>
                 <? if (!$this->products->count()) { ?>
                     <center>There are no items in the cart yet</center>
                     <hr>
@@ -31,18 +31,20 @@
                     <hr>
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="text" name="address" placeholder="Address" style="margin: 5px 0;">
+                            <input type="text" name="address" id="address" required placeholder="Address" style="margin: 5px 0;">
                         </div>
                         <div class="col-sm-6">
-                            <div class="text-right text-bigger" style="margin-top: 10px;">Total: $<?= $this->total ?></div>
+                            <div class="text-right text-bigger total" style="margin-top: 10px;">
+                                Total: $<span><?= $this->total ?></span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="tel" name="phone" id="phone" style="margin: 5px 0;">
+                            <input type="tel" name="phone" id="phone" required>
                         </div>
                         <div class="col-sm-6 text-right">
-                            <a class="button-yellow button-long with-right-arrow form-submit-trigger">MAKE YOUR ORDER</a>
+                            <input type="submit" class="button-yellow button-long with-right-arrow submit" value="MAKE YOUR ORDER" style="margin: 0;">
                         </div>
                     </div>
                 <? } ?>
@@ -69,5 +71,8 @@
         -moz-border-radius: 5px;
         border-radius: 5px;
         border: 1px #ddd solid;
+    }
+    input.error {
+        border-color: red!important;
     }
 </style>

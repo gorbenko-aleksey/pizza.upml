@@ -200,42 +200,44 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'edit'   => [
+                            'approve'   => [
                                 'type'    => Segment::class,
                                 'options' => [
-                                    'route'       => '/edit/[:id]',
+                                    'route'       => '/approve/[:id]',
                                     'constraints' => [
                                         'id' => '[0-9_-]+',
                                     ],
                                     'defaults'    => [
                                         'controller' => Controller\OrderController::class,
-                                        'action'     => 'edit',
+                                        'action'     => 'approve',
                                     ],
                                 ],
                             ],
-                            'delete' => [
+                            'set-status' => [
                                 'type'    => Segment::class,
                                 'options' => [
-                                    'route'       => '/delete/[:id]',
+                                    'route'       => '/set-status/[:id]/[:status]',
                                     'constraints' => [
                                         'id' => '[0-9_-]+',
+                                        'status' => '[0-4]',
                                     ],
                                     'defaults'    => [
                                         'controller' => Controller\OrderController::class,
-                                        'action'     => 'delete',
+                                        'action'     => 'set-status',
                                     ],
                                 ],
                             ],
-                            'view'   => [
+                            'get-receipt' => [
                                 'type'    => Segment::class,
                                 'options' => [
-                                    'route'       => '/view/[:id]',
+                                    'route'       => '/get-receipt/[:id]/[:product_id]',
                                     'constraints' => [
                                         'id' => '[0-9_-]+',
+                                        'product_id' => '[0-9_-]+',
                                     ],
                                     'defaults'    => [
                                         'controller' => Controller\OrderController::class,
-                                        'action'     => 'view',
+                                        'action'     => 'get-receipt',
                                     ],
                                 ],
                             ],
@@ -340,6 +342,19 @@ return [
                                     'defaults' => [
                                         'controller' => Controller\IncomeController::class,
                                         'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'delete'        => [
+                                'type'    => Segment::class,
+                                'options' => [
+                                    'route'       => '/delete/[:id]',
+                                    'constraints' => [
+                                        'id' => '[0-9_-]+',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => Controller\IncomeController::class,
+                                        'action'     => 'delete',
                                     ],
                                 ],
                             ],

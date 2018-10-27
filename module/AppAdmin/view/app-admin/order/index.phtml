@@ -15,9 +15,10 @@
                             <tr>
                                 <th id="id" class="sorting sort text-center" data-name="id"><?= $this->translate('Id') ?></th>
                                 <th id="status" class="sorting sort text-center" data-name="status" ><?= $this->translate('Status') ?></th>
-                                <th class="text-center"><?= $this->translate('Client data') ?></th>
+                                <th class="text-center"><?= $this->translate('Client') ?></th>
+                                <th><?= $this->translate('Products') ?></th>
+                                <th class="text-center"><?= $this->translate('Total price') ?></th>
                                 <th class="sorting_desc sort text-center" data-name="created_at" data-sort="desc"><?= $this->translate('Created at') ?></th>
-                                <th class="sorting sort text-center" data-name="changed_at"><?= $this->translate('Changed at') ?></th>
                                 <th id="actions" class="text-center"><?= $this->translate('Actions') ?></th>
                             </tr>
                         </thead>
@@ -54,25 +55,39 @@
                                             <br>
                                             <b><?= $this->translate('Address') ?>:</b> <?= $row->getAddress() ?>
                                         </td>
-                                        <td class="text-center"><?= $row->getCreatedAt() ? $row->getCreatedAt()->format('Y-m-d H:m') : '-' ?></td>
-                                        <td class="text-center"><?= $row->getChangedAt() ? $row->getChangedAt()->format('Y-m-d H:m') : '-' ?></td>
+                                        <td>
+                                            <? foreach ($row->getProducts() as $product) { ?>
+                                                <b class="receiptmodalshow" style="cursor: pointer;"
+                                                   data-url="<?= $this->urlWithParams('admin/order/get-receipt', ['id' => $row->getId(), 'product_id' => $product->getId()]) ?>">
+                                                    <?= $product->getProductParams()['name'] ?>:
+                                                </b>
+                                                <?= $product->getQuantity() ?> <?= $this->translate('pieces') ?>
+                                                <br>
+                                            <? } ?>
+                                        </td>
+                                        <td class="text-center" style="width: 75px;">$<?= $row->getTotalPrice() ?></td>
+                                        <td class="text-center" style="width: 125px;"><?= $row->getCreatedAt() ? $row->getCreatedAt()->format('Y-m-d H:m') : '-' ?></td>
                                         <td class="text-center">
-                                            <? if ($row->getStatus() != OrderEntity::STATUS_DELETED) { ?>
-                                                <a href="<?= $this->urlWithParams('admin/order/edit', ['id' => $row->getId()]) ?>">
-                                                    <i class="fa fa-pencil" title="<?= $this->translate('Edit') ?>"></i>
+                                            <? if ($row->getStatus() == OrderEntity::STATUS_CREATED) { ?>
+                                                <a href="javascript:void(0);" class="approvemodalshow" data-url="<?= $this->urlWithParams('admin/order/approve', ['id' => $row->getId()]) ?>">
+                                                    <i class="fa fa-pencil" title="<?= $this->translate('Approve') ?>"></i>
                                                 </a>
-                                            <? } else { ?>
-                                                <a href="<?= $this->urlWithParams('admin/order/view', ['id' => $row->getId()]) ?>">
-                                                    <i class="fa fa-eye" title="<?= $this->translate('View') ?>"></i>
+                                                /
+                                                <a href="javascript:void(0);" class="setdeleted" style="color: rgb(212, 103, 82);"
+                                                   data-url="<?= $this->urlWithParams('admin/order/set-status', ['id' => $row->getId(), 'status' => OrderEntity::STATUS_DELETED]) ?>">
+                                                    <i class="fa fa-remove red" title="<?= $this->translate('Delete') ?>"></i>
                                                 </a>
                                             <? } ?>
-                                            <? if (($this->identity()->isAdmin() || $this->identity()->isOperator())
-                                                    && $row->getStatus() != OrderEntity::STATUS_DELETED) { ?>
-                                                /
-                                                <a href="javascript:void(0);"
-                                                   data-url="<?= $this->urlWithParams('admin/order/delete', ['id' => $row->getId()]) ?>"
-                                                   data-id="<?= $row->getId() ?>" class="delete">
-                                                   <i class="fa fa-remove red" title="<?= $this->translate('Delete') ?>"></i>
+                                            <? if ($row->getStatus() == OrderEntity::STATUS_APPROVED) { ?>
+                                                <a href="javascript:void(0);" class="setcooked"
+                                                   data-url="<?= $this->urlWithParams('admin/order/set-status', ['id' => $row->getId(), 'status' => OrderEntity::STATUS_COOKED]) ?>">
+                                                    <i class="fa fa-arrow-circle-right" title="<?= $this->translate('Set cooked') ?>"></i>
+                                                </a>
+                                            <? } ?>
+                                            <? if ($row->getStatus() == OrderEntity::STATUS_COOKED) { ?>
+                                                <a href="javascript:void(0);" class="setdelivered"
+                                                   data-url="<?= $this->urlWithParams('admin/order/set-status', ['id' => $row->getId(), 'status' => OrderEntity::STATUS_DELIVERED]) ?>">
+                                                    <i class="fa fa-arrow-circle-right" title="<?= $this->translate('Set delivered') ?>"></i>
                                                 </a>
                                             <? } ?>
                                         </td>
@@ -80,7 +95,7 @@
                                 <? } ?>
                             <? } else { ?>
                                 <tr>
-                                    <td colspan="6" class="text-center"><?= $this->translate('No records found') ?></td>
+                                    <td colspan="7" class="text-center"><?= $this->translate('No records found') ?></td>
                                 </tr>
                             <? } ?>
                         </tbody>
@@ -95,9 +110,51 @@
     </div>
 </div>
 
+<div class="modal inmodal" id="approve" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Approve order</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary approve">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal inmodal" id="receipt" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Receipt</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.delete').on('click', function () {
+        $('.setdeleted').on('click', function () {
             var url = $(this).data('url');
             swal({
                 title: "<?= $this->translate('Are you sure?') ?>",
@@ -109,6 +166,70 @@
                 closeOnConfirm: false
             }, function () {
                 location.href = url;
+            });
+        });
+        $('.setdelivered').on('click', function () {
+            var url = $(this).data('url');
+            swal({
+                title: "<?= $this->translate('Are you sure?') ?>",
+                text: "<?= $this->translate('are you sure you want to set order to status delivered!') ?>",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "<?= $this->translate('Yes, do it!') ?>",
+                closeOnConfirm: false
+            }, function () {
+                location.href = url;
+            });
+        });
+        $('.setcooked').on('click', function () {
+            var url = $(this).data('url');
+            swal({
+                title: "<?= $this->translate('Are you sure?') ?>",
+                text: "<?= $this->translate('are you sure you want to set order to status cooked!') ?>",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "<?= $this->translate('Yes, do it!') ?>",
+                closeOnConfirm: false
+            }, function () {
+                location.href = url;
+            });
+        });
+        $('.approvemodalshow').on('click', function (e) {
+            var $this = $(this);
+            e.preventDefault();
+            $.ajax({
+                url: $this.data('url'),
+                type: 'get',
+                success: function (data) {
+                    $('#approve').modal('show');
+                    $("#approve .modal-body").html(data);
+                },
+            });
+        });
+        $('.approve').on('click', function (e) {
+            var form = $(this).parent().siblings('.modal-body').find('form');
+            e.preventDefault();
+            $.ajax({
+                url: form.attr('action'),
+                type: 'post',
+                data: form.serialize(),
+                success: function (data) {
+                    window.location.reload();
+                },
+            });
+        });
+        $('.receiptmodalshow').on('click', function (e) {
+            var $this = $(this);
+            e.preventDefault();
+            $.ajax({
+                url: $this.data('url'),
+                type: 'get',
+                success: function (data) {
+                    $('#receipt').modal('show');
+                    $("#receipt .modal-body").html(data);
+                },
             });
         });
     });

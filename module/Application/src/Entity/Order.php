@@ -131,9 +131,14 @@ class Order extends Entity\AbstractEntity
     /**
      * @return float
      */
-    public function getTotal()
+    public function getTotalPrice()
     {
-        // @todo
+        $total = 0;
+        foreach ($this->getProducts() as $product) {
+            $total += $product->getTotalPrice();
+        }
+
+        return $total;
     }
 
     /**

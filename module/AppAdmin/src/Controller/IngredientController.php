@@ -11,6 +11,8 @@ use Application\Repository\Ingredient as IngredientRepository;
 use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\Entity\DocumentIncomeIngredient as DocumentIncomeIngredientEntity;
+use Application\Repository\DocumentIncomeIngredient as DocumentIncomeIngredientRepository;
 
 class IngredientController extends AbstractActionController
 {
@@ -30,11 +32,17 @@ class IngredientController extends AbstractActionController
     protected $ingredientRepository;
 
     /**
+     * @var DocumentIncomeIngredientRepository
+     */
+    protected $documentIncomeIngredientRepository;
+
+    /**
      * @param EntityManager $em
      * @param FormProvider $formProvider
      */
     public function __construct(EntityManager $em, FormProvider $formProvider)
     {
+        $this->documentIncomeIngredientRepository = $em->getRepository(DocumentIncomeIngredientEntity::class);
         $this->ingredientRepository = $em->getRepository(IngredientEntity::class);
         $this->sorterForm = $formProvider->provide(SorterForm::class);
         $this->editForm = $formProvider->provide(EditForm::class);
@@ -49,8 +57,17 @@ class IngredientController extends AbstractActionController
         $parameters = $this->sorterForm->prepareAndGetData();
         $paginator = $this->ingredientRepository->paginatorFetchAll($limit, $offset, $parameters);
 
+        $residues = [];
+        foreach ($this->documentIncomeIngredientRepository->findAll() as $documentIncomeIngredient) {
+            if (!isset($residues[$documentIncomeIngredient->getIngredient()->getId()])) {
+                $residues[$documentIncomeIngredient->getIngredient()->getId()] = 0;
+            }
+            $residues[$documentIncomeIngredient->getIngredient()->getId()] += $documentIncomeIngredient->getResidue();
+        }
+
         return new ViewModel([
             'limit' => $limit,
+            'residues' => $residues,
             'paginator' => $paginator,
         ]);
     }

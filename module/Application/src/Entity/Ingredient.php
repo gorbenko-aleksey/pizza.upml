@@ -3,6 +3,7 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections;
 use App\Entity;
 
 /**
@@ -27,6 +28,26 @@ class Ingredient extends Entity\AbstractEntity implements Property\CreatorInterf
     private $name;
 
     /**
+     * @var Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="DocumentIncomeIngredient", mappedBy="ingredient")
+     */
+    private $ingredientIncomes;
+
+    /**
+     * @var Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="ReceiptIngredientWeight", mappedBy="ingredient")
+     */
+    private $receiptIngredientWeights;
+
+    public function __construct()
+    {
+        $this->ingredientIncomes = new Collections\ArrayCollection();
+        $this->receiptIngredientWeights = new Collections\ArrayCollection();
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -44,5 +65,53 @@ class Ingredient extends Entity\AbstractEntity implements Property\CreatorInterf
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return Collections\Collection
+     */
+    public function getIngredientIncomes()
+    {
+        return $this->ingredientIncomes;
+    }
+
+    /**
+     * @param Collections\Collection $ingredientIncome
+     *
+     * @return $this
+     */
+    public function setIngredientIncomes($ingredientIncome)
+    {
+        $this->ingredientIncomes = $ingredientIncome;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\Collection
+     */
+    public function getReceiptIngredientWeights()
+    {
+        return $this->receiptIngredientWeights;
+    }
+
+    /**
+     * @param Collections\Collection $receiptIngredientWeights
+     *
+     * @return $this
+     */
+    public function setReceiptIngredientWeights($receiptIngredientWeights)
+    {
+        $this->receiptIngredientWeights = $receiptIngredientWeights;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsed()
+    {
+        return !($this->getIngredientIncomes()->isEmpty() && $this->getReceiptIngredientWeights()->isEmpty());
     }
 }

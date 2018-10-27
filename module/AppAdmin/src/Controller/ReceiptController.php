@@ -29,6 +29,10 @@ class ReceiptController extends AbstractActionController
      */
     protected $receiptRepository;
 
+    /**
+     * @param EntityManager $em
+     * @param FormProvider  $formProvider
+     */
     public function __construct(EntityManager $em, FormProvider $formProvider)
     {
         $this->receiptRepository = $em->getRepository(ReceiptEntity::class);
@@ -78,6 +82,8 @@ class ReceiptController extends AbstractActionController
                 return $this->comeBack();
             }
         }
+
+        $this->editForm->prepare();
 
         return new ViewModel([
             'form' => $this->editForm,

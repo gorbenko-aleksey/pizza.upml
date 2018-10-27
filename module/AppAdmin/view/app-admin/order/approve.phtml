@@ -1,0 +1,4 @@
+<? $this->form->setAttributes(['action' => $this->urlWithParams('admin/order/approve', ['id' => $this->form->getObject()->getId()])])?>
+<fieldset class="form-horizontal">
+    <?= $this->adminRenderForm($this->form) ?>
+</fieldset>

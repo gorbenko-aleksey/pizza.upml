@@ -9,45 +9,19 @@ use App\Entity;
  * DocumentIncomeIngredient
  *
  * @ORM\Table(name="document_income_ingredient")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\DocumentIncomeIngredient")
  */
-class DocumentIncomeIngredient extends Entity\AbstractEntity implements Property\CreatorInterface, Property\ChangerInterface
+class DocumentIncomeIngredient extends Entity\AbstractEntity
 {
     use Entity\Property\Id;
-    use Property\Creator;
-    use Entity\Property\CreatedAt;
-    use Property\Changer;
-    use Entity\Property\ChangedAt;
 
     /**
      * @var Ingredient
      *
      * @ORM\ManyToOne(targetEntity="Ingredient", inversedBy="DocumentIncomeIngredient")
+     * @ORM\JoinColumn(name="ingredient_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $ingredient;
-
-    /**
-     * @var DocumentIncome
-     *
-     * @ORM\ManyToOne(targetEntity="DocumentIncome", inversedBy="DocumentIncomeIngredient")
-     */
-    private $document;
-
-    /**
-     * @return DocumentIncome
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
-    /**
-     * @param DocumentIncome $document
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-    }
 
     /**
      * @var float
@@ -55,6 +29,13 @@ class DocumentIncomeIngredient extends Entity\AbstractEntity implements Property
      * @ORM\Column(name="weight", type="float")
      */
     private $weight;
+
+    /**
+     * @var DocumentIncome
+     *
+     * @ORM\ManyToOne(targetEntity="DocumentIncome", inversedBy="ingredients")
+     */
+    private $document;
 
     /**
      * @var float
@@ -73,10 +54,14 @@ class DocumentIncomeIngredient extends Entity\AbstractEntity implements Property
 
     /**
      * @param Ingredient $ingredient
+     *
+     * @return $this
      */
     public function setIngredient($ingredient)
     {
         $this->ingredient = $ingredient;
+
+        return $this;
     }
 
     /**
@@ -89,10 +74,34 @@ class DocumentIncomeIngredient extends Entity\AbstractEntity implements Property
 
     /**
      * @param float $weight
+     *
+     * @return $this
      */
     public function setWeight($weight)
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return DocumentIncome
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * @param DocumentIncome $document
+     *
+     * @return $this
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+
+        return $this;
     }
 
     /**
@@ -105,9 +114,13 @@ class DocumentIncomeIngredient extends Entity\AbstractEntity implements Property
 
     /**
      * @param float $residue
+     *
+     * @return $this
      */
     public function setResidue($residue)
     {
         $this->residue = $residue;
+
+        return $this;
     }
 }

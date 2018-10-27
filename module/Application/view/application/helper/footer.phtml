@@ -71,8 +71,40 @@
 </footer>
 
 <script>
+    function telInputInit() {
+        if (document.querySelector('#phone') != undefined) {
+            window.iti = window.intlTelInput(
+                document.querySelector('#phone'),
+                {
+                    onlyCountries: ['al', 'ad', 'at', 'by', 'be', 'ba', 'bg', 'hr', 'cz', 'dk',
+                        'ee', 'fo', 'fi', 'fr', 'de', 'gi', 'gr', 'va', 'hu', 'is', 'ie', 'it', 'lv',
+                        'li', 'lt', 'lu', 'mk', 'mt', 'md', 'mc', 'me', 'nl', 'no', 'pl', 'pt', 'ro',
+                        'ru', 'sm', 'rs', 'sk', 'si', 'es', 'se', 'ch', 'ua', 'gb'],
+                    utilsScript: '<?= $this->basePath('js/intl-tel-input/js/utils.js') ?>'
+                }
+            );
+
+            document.querySelector('#phone').addEventListener('blur', function() {
+                if (document.querySelector('#phone').value.trim()) {
+                    if (!window.iti.isValidNumber()) {
+                        document.querySelector('#phone').classList.add('error');
+                    } else {
+                        document.querySelector('#phone').classList.remove('error');
+                    }
+                }
+            });
+            document.querySelector('#phone').addEventListener('change', function() {
+                document.querySelector('#phone').classList.remove('error');
+            });
+            document.querySelector('#phone').addEventListener('keyup', function() {
+                document.querySelector('#phone').classList.remove('error');
+            });
+        }
+    }
+    telInputInit();
+
     $(document).ready(function () {
-        $('.cart-add').click(function(){
+        $('.cart-add').click(function () {
             $.ajax({
                 data: {id: $(this).data('id')},
                 url: '<?= $this->url('cart/add') ?>',
@@ -82,6 +114,8 @@
                     $('body').append(data.html);
                     $('#cart-qty span span').text(data.qty);
                     $('header .cart-trigger').trigger('click');
+                    telInputInit();
+                    telInputMask();
                 },
                 error: function () {
                     alert('An error occurred while processing the request. Please contact the administrator');
@@ -89,59 +123,96 @@
             });
         });
 
-        $('body').on('click', '.cart-trigger', function(e) {
+        $('body').on('click', '.cart-trigger', function (e) {
             e.preventDefault();
             var cart_top_pos = $(window).scrollTop();
-            if(cart_top_pos + $('#cart').height() > $(document).height()) {
-                    $.scrollTo(0, 800, { axis:'y' });
-                    cart_top_pos = 0;
+            if (cart_top_pos + $('#cart').height() > $(document).height()) {
+                $.scrollTo(0, 800, {axis: 'y'});
+                cart_top_pos = 0;
             }
             $('#cart').css('top', cart_top_pos + 'px');
             $('#cart').toggleClass('active');
             $('#screen-cover').toggleClass('active');
         });
 
-        $('body').on('click', '#screen-cover', function(e) {
+        $('body').on('click', 'input.submit', function (e) {
+            if (!$(this).parents('form').find('#address').val()) {
+                $(this).parents('form').find('#address').addClass('error');
+            } else {
+                $(this).parents('form').find('#address').removeClass('error');
+            }
+            if (!$(this).parents('form').find('#phone').val()) {
+                $(this).parents('form').find('#phone').addClass('error');
+            }
+            var data = {address : $(this).parents('form').find('#address').val()};
+            data.phone = window.iti.getNumber(intlTelInputUtils.numberFormat.E164);
+            e.preventDefault();
+            if (!$(this).parents('form').find('#address').hasClass('error') && !$(this).parents('form').find('#phone').hasClass('error')){
+                $.ajax({
+                    data: data,
+                    url: '<?= $this->url('order') ?>',
+                    type: 'post',
+                    success: function (data) {
+                        alert('Your order is successfully placed');
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('An error occurred while processing the request. Please contact the administrator');
+                    }
+                });
+            }
+            return false;
+        });
+
+        $('body').on('click', '#screen-cover', function (e) {
             $('#cart').removeClass('active');
             $('#screen-cover').removeClass('active');
         });
 
-        $('body').on('click', '.product-pieces-up', function(e) {
+        $('body').on('click', '.product-pieces-up', function (e) {
             var input = $(this).parent().find('input[type=text]');
             value = parseInt(input.val(), 10);
-            if(!value || value < 0) value = 0;
-            input.val(value+1);
-            $.ajax({
-                data: {id: $(this).data('id'), qty: value+1},
-                url: '<?= $this->url('cart/update') ?>',
-                type: 'post'
-            });
+            if (!value || value < 0) value = 0;
+            input.val(value + 1);
+            updateQty($(this), value + 1);
         });
 
-        $('body').on('click', '.product-pieces-down', function(e) {
+        $('body').on('click', '.product-pieces-down', function (e) {
             var input = $(this).parent().find('input[type=text]');
             value = parseInt(input.val(), 10);
-            if(!value || value < 2) value = 2;
-            input.val(value-1);
-            $.ajax({
-                data: {id: $(this).data('id'), qty: value-1},
-                url: '<?= $this->url('cart/update') ?>',
-                type: 'post'
-            });
+            if (!value || value < 2) value = 2;
+            input.val(value - 1);
+            updateQty($(this), value - 1);
         });
 
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            onlyCountries: ["al", "ad", "at", "by", "be", "ba", "bg", "hr", "cz", "dk",
-                "ee", "fo", "fi", "fr", "de", "gi", "gr", "va", "hu", "is", "ie", "it", "lv",
-                "li", "lt", "lu", "mk", "mt", "md", "mc", "me", "nl", "no", "pl", "pt", "ro",
-                "ru", "sm", "rs", "sk", "si", "es", "se", "ch", "ua", "gb"],
-            utilsScript: "<?= $this->basePath('js/intl-tel-input/js/utils.js') ?>"
-        });
-        
-        
-        
-        
-        
+        function updateQty(input, qty) {
+            $.ajax(
+                {
+                    type: 'post',
+                    data: {id: input.data('id'), qty: qty},
+                    url: '<?= $this->url('cart/update') ?>',
+                    success: function (data) {
+                        input.parents('form').find('.total span').html(data.price);
+                        input.parents('.row').find('.product-price span').html(data.price);
+                    },
+                    error: function () {
+                        alert('An error occurred while processing the request. Please contact the administrator');
+                    }
+                }
+            );
+        }
+
+        function telInputMask() {
+            if ($("#phone").length) {
+                var mask1 = $("#phone").attr('placeholder').replace(/[0-9]/g, 0);
+                $('#phone').mask(mask1);
+                $("#phone").on("countrychange", function (e, countryData) {
+                    $("#phone").val('');
+                    var mask1 = $("#phone").attr('placeholder').replace(/[0-9]/g, 0);
+                    $('#phone').mask(mask1);
+                });
+            }
+        }
+        telInputMask();
     });
 </script>

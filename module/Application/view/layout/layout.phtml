@@ -26,7 +26,10 @@
         ?>
 
         <?= $this->headScript()
-            ->appendFile('https://code.jquery.com/jquery-3.3.1.min.js')
+            ->appendFile($this->basePath('js/intl-tel-input/js/utils.js'))
+            ->appendFile($this->basePath('js/intl-tel-input/js/intlTelInput.js'))
+            ->appendFile($this->basePath('skins/application/assets/js/jquery-1.11.3.min.js'))
+            ->appendFile('//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js')
             ->appendFile($this->basePath('skins/application/assets/js/modernizr-custom.min.js'))
             ->appendFile('//html5shim.googlecode.com/svn/trunk/html5.js', '', ['conditional' => 'lt IE 9'])
         ?>
@@ -42,7 +45,6 @@
         <?= $this->footer() ?>
 
         <?= $this->inlineScript()
-            ->appendFile($this->basePath('skins/application/assets/js/jquery-1.11.3.min.js'))
             ->appendFile($this->basePath('skins/application/assets/bootstrap/js/bootstrap.min.js'))
             ->appendFile($this->basePath('skins/application/assets/owl-carousel2/owl.carousel.min.js'))
             ->appendFile($this->basePath('skins/application/assets/retina/retina.min.js'))
@@ -52,7 +54,6 @@
             ->appendFile($this->basePath('skins/application/assets/js/jquery.scrollTo.min.js'))
             ->appendFile($this->basePath('skins/application/assets/js/jquery.nav.min.js'))
             ->appendFile($this->basePath('skins/application/assets/js/custom.js'))
-            ->appendFile($this->basePath('js/intl-tel-input/js/intlTelInput.js'))
         ?>
     </body>
 </html>

@@ -65,6 +65,9 @@ class CartController extends AbstractActionController
 
         $this->cartService->update($product, $this->params()->fromPost('qty'));
 
-        return $this->getResponse();
+        return new JsonModel([
+            'total' => $this->cartService->getTotal(),
+            'price' => $product->getPrice() * $this->params()->fromPost('qty'),
+        ]);
     }
 }
