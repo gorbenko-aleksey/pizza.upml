@@ -146,14 +146,14 @@ class OrderController extends AbstractActionController
             foreach ($ingredients as $id => $weight) {
                 $ingredient = $this->ingredientRepository->find($id);
                 if (!$ingredient) {
-                    $this->flashMessenger()->addSuccessMessage(
+                    $this->flashMessenger()->addErrorMessage(
                         $this->translator()->translate('Ingredient with id="' . $id . '" not found')
                     );
                     return $this->comeBack();
                 }
 
                 if ($ingredient->getIngredientIncomes()->isEmpty()) {
-                    $this->flashMessenger()->addSuccessMessage(
+                    $this->flashMessenger()->addErrorMessage(
                         $this->translator()->translate('For ingredient "' . $ingredient->getName()
                             . '" income not found')
                     );
@@ -171,7 +171,7 @@ class OrderController extends AbstractActionController
             foreach ($ingredients as $id => $weight) {
                 $ingredient = $this->ingredientRepository->find($id);
                 if ($residues[$id] < $weight) {
-                    $this->flashMessenger()->addSuccessMessage(
+                    $this->flashMessenger()->addErrorMessage(
                         $this->translator()->translate('For ingredient "' . $ingredient->getName()
                             . '" residues less than necessary. Need ' . $weight . 'g.' . ' In store only ' . $residues[$id] . 'g')
                     );

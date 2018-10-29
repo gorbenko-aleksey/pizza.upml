@@ -79,6 +79,11 @@
                                                 </a>
                                             <? } ?>
                                             <? if ($row->getStatus() == OrderEntity::STATUS_APPROVED) { ?>
+                                                <a href="javascript:void(0);" class="setcreated"
+                                                   data-url="<?= $this->urlWithParams('admin/order/set-status', ['id' => $row->getId(), 'status' => OrderEntity::STATUS_CREATED]) ?>">
+                                                    <i class="fa fa-arrow-circle-left" title="<?= $this->translate('Set created') ?>"></i>
+                                                </a>
+                                                /
                                                 <a href="javascript:void(0);" class="setcooked"
                                                    data-url="<?= $this->urlWithParams('admin/order/set-status', ['id' => $row->getId(), 'status' => OrderEntity::STATUS_COOKED]) ?>">
                                                     <i class="fa fa-arrow-circle-right" title="<?= $this->translate('Set cooked') ?>"></i>
@@ -173,6 +178,20 @@
             swal({
                 title: "<?= $this->translate('Are you sure?') ?>",
                 text: "<?= $this->translate('are you sure you want to set order to status delivered!') ?>",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "<?= $this->translate('Yes, do it!') ?>",
+                closeOnConfirm: false
+            }, function () {
+                location.href = url;
+            });
+        });
+        $('.setcreated').on('click', function () {
+            var url = $(this).data('url');
+            swal({
+                title: "<?= $this->translate('Are you sure?') ?>",
+                text: "<?= $this->translate('are you sure you want to set order to status created!') ?>",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
