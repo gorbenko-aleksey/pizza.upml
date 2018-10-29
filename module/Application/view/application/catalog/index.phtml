@@ -29,7 +29,7 @@
                                     <sub>$</sub><?= $dollars ?>.<sup><?= $cents ?></sup>
                                 </div>
                                 <? if ($product->getImage()) { ?>
-                                    <img src="<?= $this->createPreviewSrc($product->getImage(), 352, 328) ?>">
+                                    <img src="<?= $this->createPreviewSrc($product->getImage(), 352) ?>">
                                 <? } else { ?>
                                     <img alt="product" src="<?= $this->basePath('skins/application/assets/images/products/1.png') ?>">
                                 <? } ?>

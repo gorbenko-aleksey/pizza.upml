@@ -1,7 +1,7 @@
 <div class="product-preview-small">
     <div class="product-img">
         <? if ($product->getProduct()->getImage()) { ?>
-            <img src="<?= $this->createPreviewSrc($product->getProduct()->getImage(), 83, 76) ?>">
+            <img src="<?= $this->createPreviewSrc($product->getProduct()->getImage(), 83) ?>">
         <? } else { ?>
             <img alt="product photo" src="/skins/application/assets/images/products/1_small.png">
         <? } ?>
