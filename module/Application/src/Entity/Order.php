@@ -61,6 +61,14 @@ class Order extends Entity\AbstractEntity
     private $products;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
+     */
+    private $driver;
+
+    /**
      * Order constructor.
      */
     public function __construct()
@@ -217,6 +225,26 @@ class Order extends Entity\AbstractEntity
     public function removeProduct($product)
     {
         $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+    /**
+     * @param User $driver
+     *
+     * @return $this
+     */
+    public function setDriver(User $driver)
+    {
+        $this->driver = $driver;
 
         return $this;
     }

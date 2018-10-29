@@ -17,7 +17,7 @@ class Order extends AbstractRepository implements InitializableInterface
                 new Plugin\Filter\Filter(
                     $this->_class,
                     [
-                        Repository\Filter\Equivalent::class => ['status'],
+                        Repository\Filter\Equivalent::class => ['status', 'driver'],
                     ]
                 )
             )

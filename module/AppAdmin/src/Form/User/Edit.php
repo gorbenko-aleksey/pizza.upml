@@ -158,7 +158,7 @@ class Edit extends AbstractEdit
                     'options' => [
                         'max' => 255,
                     ],
-                ],
+            ],
                 ['name' => \Zend\I18n\Validator\Alpha::class],
             ],
         ]);

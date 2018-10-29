@@ -73,7 +73,13 @@ class OrderController extends AbstractActionController
             $fs = null;
         }
 
-        $parameters = array_merge([$fs], $this->filterForm->prepareAndGetData(), $this->sorterForm->prepareAndGetData());
+        if ($this->identity()->isDriver()) {
+            $fd = new FilterParameter('driver', $this->identity()->getId());
+        } else {
+            $fd = null;
+        }
+
+        $parameters = array_merge([$fs, $fd], $this->filterForm->prepareAndGetData(), $this->sorterForm->prepareAndGetData());
         $paginator  = $this->orderRepository->paginatorFetchAll($limit, $offset, $parameters);
 
         return new ViewModel([
