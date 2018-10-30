@@ -8,8 +8,8 @@ return [
                 'driverClass' => Doctrine\DBAL\Driver\PDOMySql\Driver::class,
                 'params' => [
                     'user' => 'root',
-                    'password' => 'hfphf,jnrf',
-                    'dbname' => 'zf3',
+                    'password' => '0nKNPgt1vu',
+                    'dbname' => 'upml_db',
                     'charset' => 'UTF8',
                     'driverOptions' => [
                         PDO::MYSQL_ATTR_INIT_COMMAND =>

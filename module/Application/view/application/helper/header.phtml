@@ -18,10 +18,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-6">
-                    <em>Call now: 0 800 - <span class="text-uppercase">Pizza delivery</span></em>
+                    <em>Телефон: 0 800 111 555 666 - <span class="text-uppercase">Доставка піци</span></em>
                 </div>
                 <div class="col-xs-6 text-right">
-                    Welcome Guest, <a href="#" class="text-uppercase">Sign in</a> | <a href="#" class="text-uppercase">Create new account</a>
+                    Ласкаво прсимо<!--, <a href="#" class="text-uppercase">Sign in</a> | <a href="#" class="text-uppercase">Create new account</a>-->
                 </div>
             </div>
         </div>
@@ -39,25 +39,25 @@
                                 </a>
                             </div>
                             <div class="centered-column hidden-xs">
-                                <h1 class="site-name">UPML PIZZERIA</h1>
-                                <h4 class="site-name-info">Fast delivery in Kiev, delicious pizza</h4>
+                                <h1 class="site-name">УФМЛ ПІЦЕРІЯ</h1>
+                                <h4 class="site-name-info">Швидка доставка по Києву, смачна піца</h4>
                             </div>
                         </div>
                     </div>
                     <nav id="main-navigation">
                         <ul id="one-page-nav">
                             <li class="<?= $this->currentUrl() == $this->url('home') ? 'active' : '' ?>">
-                                <a href="<?= $this->url('home') ?>">Home</a>
+                                <a href="<?= $this->url('home') ?>">Головна</a>
                             </li>
                             <li class="<?= $this->currentUrl() == $this->url('page', ['code' => 'about']) ? 'active' : '' ?>">
-                                <a href="<?= $this->url('page', ['code' => 'about']) ?>">About Us</a>
+                                <a href="<?= $this->url('page', ['code' => 'about']) ?>">Про нас</a>
                             </li>
                             <li class="<?= $this->currentUrl() == $this->url('catalog') ? 'active' : '' ?>">
-                                <a href="<?= $this->url('catalog') ?>">Menu</a>
+                                <a href="<?= $this->url('catalog') ?>">Меню</a>
                                 <?= $this->categoties() ?>
                             </li>
                             <li class="<?= $this->currentUrl() == $this->url('page', ['code' => 'contact']) ? 'active' : '' ?>">
-                                <a href="<?= $this->url('page', ['code' => 'contact']) ?>">Contact Us</a>
+                                <a href="<?= $this->url('page', ['code' => 'contact']) ?>">Зв'язатися з нами</a>
                             </li>
                             <li>
                                 <div class="menu-item has-small-label cart-trigger" id="cart-qty">

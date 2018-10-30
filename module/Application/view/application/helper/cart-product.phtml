@@ -10,13 +10,13 @@
         <div class="row">
             <div class="col-md-8">
                 <h4 class="product-title"><?= $product->getProduct()->getName() ?></h4>
-                $<?= $product->getPrice() ?>/, order
+                $<?= $product->getPrice() ?>/, замовлення
                 <div class="product-pieces">
                     <input type="text" value="<?= $product->getQuantity() ?>">
                     <div class="product-pieces-up" data-id="<?= $product->getProduct()->getId() ?>"></div>
                     <div class="product-pieces-down" data-id="<?= $product->getProduct()->getId() ?>"></div>
                 </div>
-                pieces
+                штук
             </div>
             <div class="col-md-4 product-price">
                 $<span><?= $product->getTotalPrice() ?></span>
