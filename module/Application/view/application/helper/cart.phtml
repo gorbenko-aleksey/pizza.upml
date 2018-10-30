@@ -3,11 +3,11 @@
         <div class="cart-content">
             <div class="cart-close cart-trigger"><i class="fa fa-close"></i></div>
             <div class="border-lines-container">
-                <h1 class="no-top-margin border-lines">Cart</h1>
+                <h1 class="no-top-margin border-lines">Корзина</h1>
             </div>
             <form>
                 <? if (!$this->products->count()) { ?>
-                    <center>There are no items in the cart yet</center>
+                    <center>Наразі немає продуктів в корзині.</center>
                     <hr>
                 <? } else { ?>
                     <? foreach ($this->products as $product) { ?>
@@ -20,10 +20,10 @@
                         <div class="product-content">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h4 class="product-title">Delivery</h4>
+                                    <h4 class="product-title">Доставка</h4>
                                 </div>
                                 <div class="col-md-4 product-price">
-                                    free
+                                    безплатно
                                 </div>
                             </div>
                         </div><!-- .product-content -->
@@ -31,11 +31,11 @@
                     <hr>
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="text" name="address" id="address" required placeholder="Address" style="margin: 5px 0;">
+                            <input type="text" name="address" id="address" required placeholder="Адреса" style="margin: 5px 0;">
                         </div>
                         <div class="col-sm-6">
                             <div class="text-right text-bigger total" style="margin-top: 10px;">
-                                Total: $<span><?= $this->total ?></span>
+                                Всього: $<span><?= $this->total ?></span>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                             <input type="tel" name="phone" id="phone" required>
                         </div>
                         <div class="col-sm-6 text-right">
-                            <input type="submit" class="button-yellow button-long with-right-arrow submit" value="MAKE YOUR ORDER" style="margin: 0;">
+                            <input type="submit" class="button-yellow button-long with-right-arrow submit" value="Замовити" style="margin: 0;">
                         </div>
                     </div>
                 <? } ?>
