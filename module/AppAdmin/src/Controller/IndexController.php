@@ -26,9 +26,19 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        $popularProducts = [];
+        $orderCountByDays = $orderTotalPriceByDays = $popularProducts = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $orderCountByDays[date('m-d-Y', strtotime('-' . $i . ' days'))] = 0;
+            $orderTotalPriceByDays[date('m-d-Y', strtotime('-' . $i . ' days'))] = 0;
+        }
+
         /* @var OrderEntity $order */
         foreach ($this->orderRepository->findAll() as $order) {
+            $orderDate = $order->getCreatedAt()->format('m-d-Y');
+            if (in_array($orderDate, array_keys($orderCountByDays))) {
+                $orderCountByDays[$orderDate] += 1;
+                $orderTotalPriceByDays[$orderDate] += $order->getTotalPrice();
+            }
             /* @var OrderProductEntity $product */
             foreach ($order->getProducts() as $product) {
                 $productName = $product->getProductParams()['name'];
@@ -39,6 +49,10 @@ class IndexController extends AbstractActionController
             }
         }
 
-        return new ViewModel(['popularProducts' => $popularProducts]);
+        return new ViewModel([
+            'orderTotalPriceByDays' => $orderTotalPriceByDays,
+            'orderCountByDays'      => $orderCountByDays,
+            'popularProducts'       => $popularProducts,
+        ]);
     }
 }
