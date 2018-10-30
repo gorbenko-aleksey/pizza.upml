@@ -5,6 +5,7 @@ namespace AppAdmin\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use AppAdmin\View\Helper\RowsPerPage;
 use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
 use Doctrine\ORM\EntityManager;
 use Application\Entity\Order as OrderEntity;
 use Application\Repository\Order as OrderRepository;
@@ -24,6 +25,11 @@ class OrderController extends AbstractActionController
      * @var FilterForm
      */
     protected $filterForm;
+
+    /**
+     * @var EditForm
+     */
+    protected $editForm;
 
     /**
      * @var SorterForm
@@ -46,10 +52,15 @@ class OrderController extends AbstractActionController
     protected $documentIncomeIngredient;
 
     /**
+     * @var PhpRenderer
+     */
+    protected $viewRenderer;
+
+    /**
      * @param EntityManager $em
      * @param FormProvider $formProvider
      */
-    public function __construct(EntityManager $em, FormProvider $formProvider)
+    public function __construct(EntityManager $em, FormProvider $formProvider, PhpRenderer $viewRenderer)
     {
         $this->documentIncomeIngredient = $em->getRepository(DocumentIncomeIngredientEntity::class);
         $this->ingredientRepository = $em->getRepository(IngredientEntity::class);
@@ -57,6 +68,7 @@ class OrderController extends AbstractActionController
         $this->sorterForm = $formProvider->provide(SorterForm::class);
         $this->filterForm = $formProvider->provide(FilterForm::class);
         $this->editForm = $formProvider->provide(EditForm::class);
+        $this->viewRenderer = $viewRenderer;
     }
 
     public function indexAction()
@@ -223,5 +235,28 @@ class OrderController extends AbstractActionController
         $view = new ViewModel(['product' => $product]);
         $view->setTerminal(true);
         return $view;
+    }
+
+    public function exportAction()
+    {
+        $orders = $this->orderRepository->findAll();
+        $view = new ViewModel();
+        $view->setTemplate('app-admin/order/export')
+            ->setVariable('orders', $orders)
+            ->setTerminal(true);
+
+        $output = $this->viewRenderer->render($view);
+
+        $response = $this->getResponse();
+
+        $headers = $response->getHeaders();
+        $headers->addHeaderLine('Content-Type', 'text/csv')
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="orders_' . date('Y-m-d_H:i:s') . '.csv"')
+            ->addHeaderLine('Accept-Ranges', 'bytes')
+            ->addHeaderLine('Content-Length', strlen($output));
+
+        $response->setContent($output);
+
+        return $response;
     }
 }

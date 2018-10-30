@@ -7,6 +7,12 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5><?= $this->translate('List of orders') ?></h5>
+
+                <div class="btn-group pull-right">
+                    <a href="<?= $this->urlWithParams('admin/order/export') ?>" class="btn-primary btn btn-xs">
+                        <?= $this->translate('Export to csv') ?>
+                    </a>
+                </div>
             </div>
             <div class="ibox-content">
                 <div class="table-responsive">

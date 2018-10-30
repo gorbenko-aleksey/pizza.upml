@@ -241,6 +241,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'export' => [
+                                'type'    => Literal::class,
+                                'options' => [
+                                    'route'    => '/export',
+                                    'defaults' => [
+                                        'controller' => Controller\OrderController::class,
+                                        'action'     => 'export',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'product'                       => [

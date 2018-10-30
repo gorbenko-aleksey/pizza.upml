@@ -1,0 +1,56 @@
+<?
+
+$rows = [
+    [
+        $this->translate('Id'),
+        $this->translate('Status'),
+        $this->translate('Created at'),
+        $this->translate('Adress'),
+        $this->translate('Phone'),
+        $this->translate('Total price'),
+        $this->translate('Driver name'),
+    ],
+];
+
+/* @var \Application\Entity\Order $order */
+foreach ($this->orders as $order) {
+    if ($order->getStatus() == \Application\Entity\Order::STATUS_DELETED) {
+        $status = $this->translate('Deleted');
+    } else {
+        if ($order->getStatus() == \Application\Entity\Order::STATUS_CREATED) {
+            $status = $this->translate('Created');
+        } else {
+            if ($order->getStatus() == \Application\Entity\Order::STATUS_APPROVED) {
+                $status = $this->translate('Approved');
+            } else {
+                if ($order->getStatus() == \Application\Entity\Order::STATUS_COOKED) {
+                    $status = $this->translate('Cooked');
+                } else {
+                    if ($order->getStatus() == \Application\Entity\Order::STATUS_DELIVERED) {
+                        $status = $this->translate('Delivered');
+                    }
+                }
+            }
+        }
+    }
+
+    $rows[] = [
+        'id'          => $order->getId(),
+        'status'      => $status,
+        'created_at'  => $order->getCreatedAt()->format('Y-m-d H:m'),
+        'adress'      => $order->getAddress(),
+        'phone'       => $order->getPhone(),
+        'total_price' => $order->getTotalPrice(),
+        'driver_name' => $order->getDriver() ? $order->getDriver()->getFullName() : '',
+    ];
+}
+
+if (count($rows) > 0) {
+    $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
+    $fh = @fopen('php://output', 'w');
+    fputs($fh, $bom);
+    foreach ($rows as $row) {
+        fputcsv($fh, $row, ';');
+    }
+    fclose($fh);
+}
