@@ -165,7 +165,7 @@ class Cart
             $originalProduct = $this->productRepository->find($product->getProduct()->getId());
 
             if (!$originalProduct || $originalProduct->getStatus() == ProductEntity::STATUS_DISABLED) {
-                $this->removeByHash($product->getHash()); // todo
+                $this->session()->products->removeElement($product);
                 break;
             } else {
                 $product->setProduct($originalProduct);
