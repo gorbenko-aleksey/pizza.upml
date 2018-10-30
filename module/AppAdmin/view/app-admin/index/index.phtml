@@ -1,1 +1,45 @@
-<?= $this->translate('Dashboard coming soon ...') ?>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Popular products</h5>
+            </div>
+            <div class="ibox-content">
+                <div>
+                    <canvas id="popularProducts" height="140"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6"></div>
+</div>
+
+<script>
+    $(function () {
+        var i = 0,
+            backgroundColors = [];
+
+        while (i <= <?= count($this->popularProducts) ?>) {
+            backgroundColors.push("rgb("
+                + Math.floor((Math.random() * 130) + 100) + ", "
+                + Math.floor((Math.random() * 130) + 100) + ", "
+                + Math.floor((Math.random() * 130) + 100) + ")");
+            i++;
+        };
+
+        var doughnutData = {
+            labels: <?= json_encode(array_keys($this->popularProducts)) ?>,
+            datasets: [{
+                data: <?= json_encode(array_values($this->popularProducts)) ?>,
+                backgroundColor: backgroundColors,
+            }]
+        } ;
+
+        var doughnutOptions = {
+            responsive: true
+        };
+
+        var ctx = document.getElementById("popularProducts").getContext("2d");
+        new Chart(ctx, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
+    });
+</script>

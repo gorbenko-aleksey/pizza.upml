@@ -58,7 +58,8 @@ class OrderController extends AbstractActionController
 
     /**
      * @param EntityManager $em
-     * @param FormProvider $formProvider
+     * @param FormProvider  $formProvider
+     * @param PhpRenderer   $viewRenderer
      */
     public function __construct(EntityManager $em, FormProvider $formProvider, PhpRenderer $viewRenderer)
     {
